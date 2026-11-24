@@ -53,4 +53,10 @@ public class AuthController {
             return "register";
         }
     }
+
+    // Display login page
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "login";
+    }
 }
