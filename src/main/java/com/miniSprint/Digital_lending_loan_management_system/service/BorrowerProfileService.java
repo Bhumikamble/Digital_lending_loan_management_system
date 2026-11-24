@@ -65,4 +65,30 @@ public class BorrowerProfileService {
                         new RuntimeException(
                                 "Borrower profile not found"));
     }
+
+
+    @Transactional
+    public BorrowerProfile updateProfile(
+            Long userId,
+            String fullName,
+            String phone,
+            LocalDate dateOfBirth,
+            String address,
+            String employmentType,
+            BigDecimal monthlyIncome) {
+
+        BorrowerProfile profile = borrowerProfileRepository
+                .findByUser_Id(userId)
+                .orElseThrow(() ->
+                        new RuntimeException("Borrower profile not found"));
+
+        profile.setFullName(fullName);
+        profile.setPhone(phone);
+        profile.setDateOfBirth(dateOfBirth);
+        profile.setAddress(address);
+        profile.setEmploymentType(employmentType);
+        profile.setMonthlyIncome(monthlyIncome);
+
+        return borrowerProfileRepository.save(profile);
+    }
 }
