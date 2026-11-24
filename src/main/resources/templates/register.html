@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Digital Lending System</title>
+</head>
+<body>
+
+<h2>Create Your Account</h2>
+
+<form th:action="@{/register}"
+      th:object="${registerRequest}"
+      method="post">
+
+    <div>
+        <label>Email:</label>
+        <input type="email" th:field="*{email}" placeholder="Enter your email">
+        <p th:if="${#fields.hasErrors('email')}"
+           th:errors="*{email}"></p>
+    </div>
+
+    <br>
+
+    <div>
+        <label>Password:</label>
+        <input type="password" th:field="*{password}" placeholder="Enter password">
+        <p th:if="${#fields.hasErrors('password')}"
+           th:errors="*{password}"></p>
+    </div>
+
+    <br>
+
+    <p th:if="${error}" th:text="${error}"></p>
+
+    <button type="submit">Register</button>
+
+</form>
+
+<p>
+    Already have an account?
+    <a th:href="@{/login}">Login here</a>
+</p>
+
+</body>
+</html>
