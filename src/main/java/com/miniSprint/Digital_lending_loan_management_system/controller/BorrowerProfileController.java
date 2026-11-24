@@ -54,6 +54,25 @@ public class BorrowerProfileController {
         return ResponseEntity.ok(convertToResponse(profile));
     }
 
+    // Update borrower profile
+    @PutMapping
+    public ResponseEntity<BorrowerProfileResponse> updateProfile(
+            @RequestParam Long userId,
+            @Valid @RequestBody BorrowerProfileRequest request) {
+
+        BorrowerProfile profile = borrowerProfileService.updateProfile(
+                userId,
+                request.getFullName(),
+                request.getPhone(),
+                request.getDateOfBirth(),
+                request.getAddress(),
+                request.getEmploymentType(),
+                request.getMonthlyIncome()
+        );
+
+        return ResponseEntity.ok(convertToResponse(profile));
+    }
+
     // Convert Entity into Response DTO
     private BorrowerProfileResponse convertToResponse(
             BorrowerProfile profile) {
