@@ -25,23 +25,26 @@ public class Loan {
     private BorrowerProfile borrower;
 
     @NotNull(message = "Loan amount is required")
-    @Positive(message = "Loan amount must be greater than zero")
+    @DecimalMin(value = "1000.00",
+            message = "Minimum loan amount is 1000")
+    @DecimalMax(value = "1000000.00",
+            message = "Maximum loan amount is 1000000")
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal amount;
 
     @NotNull(message = "Interest rate is required")
     @PositiveOrZero(message = "Interest rate cannot be negative")
-    @Column(name = "interest_rate", nullable = false, precision = 5, scale = 2)
+    @Column(name = "interest_rate",
+            nullable = false,
+            precision = 5,
+            scale = 2)
     private BigDecimal interestRate;
 
     @NotNull(message = "Loan tenure is required")
-    @Min(value = 1, message = "Minimum tenure is 1 month")
+    @Min(value = 3, message = "Minimum tenure is 3 months")
+    @Max(value = 60, message = "Maximum tenure is 60 months")
     @Column(name = "tenure_months", nullable = false)
     private Integer tenureMonths;
-
-    @NotBlank(message = "Loan purpose is required")
-    @Column(name = "loan_purpose", nullable = false, length = 255)
-    private String loanPurpose;
 
     @NotNull(message = "EMI is required")
     @Positive(message = "EMI must be greater than zero")
@@ -55,11 +58,15 @@ public class Loan {
     @Column(name = "applied_date", nullable = false)
     private LocalDate appliedDate;
 
-    // Automatically set initial values before saving
+    @Column(name = "admin_remark", length = 500)
+    private String adminRemark;
+
+    // Automatically initialize loan details
     @PrePersist
     public void prePersist() {
+
         if (status == null) {
-            status = LoanStatus.PENDING;
+            status = LoanStatus.APPLIED;
         }
 
         if (appliedDate == null) {
