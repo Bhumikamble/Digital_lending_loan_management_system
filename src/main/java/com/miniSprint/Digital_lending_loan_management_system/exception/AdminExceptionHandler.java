@@ -1,5 +1,6 @@
 package com.miniSprint.Digital_lending_loan_management_system.exception;
 
+import com.miniSprint.Digital_lending_loan_management_system.controller.AdminController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -7,8 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
 
-@RestControllerAdvice(basePackages =
-        "com.miniSprint.Digital_lending_loan_management_system.controller")
+@RestControllerAdvice(assignableTypes = AdminController.class)
 public class AdminExceptionHandler {
 
     @ExceptionHandler(LoanNotFoundException.class)
