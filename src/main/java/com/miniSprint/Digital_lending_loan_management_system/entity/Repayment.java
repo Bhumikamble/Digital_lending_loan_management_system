@@ -1,10 +1,16 @@
-package com.sprint.lending.entity;
+
+package com.miniSprint.Digital_lending_loan_management_system.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "repayments")
 public class Repayment {
@@ -36,6 +42,4 @@ public class Repayment {
 
     public Repayment() {
     }
-
-    // Generate getters and setters using IntelliJ
 }
