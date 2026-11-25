@@ -84,7 +84,10 @@ public class RepaymentService {
     }
 
     // Common schedule-generation logic
-    private List<Repayment> createSchedule(Loan loan) {
+    private List<Repayment> createSchedule(Loan loan) {if (loan.getStatus() != LoanStatus.APPROVED) {
+        throw new IllegalStateException(
+                "Repayment schedule can only be generated for approved loans");
+    }
 
         Long loanId = loan.getId();
 
