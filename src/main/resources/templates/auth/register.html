@@ -5,9 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Create Account | DigitalLend</title>
-
     <link rel="stylesheet" th:href="@{/css/auth.css}">
 </head>
 
@@ -15,9 +13,7 @@
 
 <div class="container">
 
-    <!-- Left Information Panel -->
     <div class="left-panel">
-
         <div class="brand">Digital<span>Lend</span></div>
 
         <h1>Make Your Financial Goals a Reality.</h1>
@@ -33,19 +29,13 @@
             <div class="feature"><span>✓</span> Transparent repayment tracking</div>
             <div class="feature"><span>✓</span> Simple digital experience</div>
         </div>
-
     </div>
 
-    <!-- Right Registration Form -->
     <div class="right-panel">
 
         <h2>Create Account</h2>
+        <p class="subtitle">Join DigitalLend and get started today.</p>
 
-        <p class="subtitle">
-            Join DigitalLend and get started today.
-        </p>
-
-        <!-- Server Error -->
         <div class="server-error"
              th:if="${error}"
              th:text="${error}">
@@ -55,14 +45,33 @@
               th:object="${registerRequest}"
               method="post">
 
-            <!-- CSRF Protection -->
             <input type="hidden"
                    th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}">
 
-            <!-- Email Field -->
+            <!-- Select Account Type -->
             <div class="form-group">
+                <label for="role">Register As</label>
 
+                <select id="role" name="role" class="role-select" required>
+                    <option value="BORROWER" selected>Borrower</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+            </div>
+
+            <!-- Admin Authorization Code -->
+            <div class="form-group" id="adminCodeGroup" style="display:none;">
+                <label for="adminCode">Admin Authorization Code</label>
+
+                <input type="password"
+                       id="adminCode"
+                       name="adminCode"
+                       placeholder="Enter admin authorization code"
+                       autocomplete="off">
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
                 <label for="email">Email Address</label>
 
                 <input type="email"
@@ -76,12 +85,10 @@
                    th:if="${#fields.hasErrors('email')}"
                    th:errors="*{email}">
                 </p>
-
             </div>
 
-            <!-- Password Field -->
+            <!-- Password -->
             <div class="form-group">
-
                 <label for="password">Create Password</label>
 
                 <input type="password"
@@ -91,50 +98,24 @@
                        autocomplete="new-password"
                        required>
 
-                <!-- Show Password -->
                 <div class="show-password">
-
                     <input type="checkbox" id="showPassword">
-
-                    <label for="showPassword">
-                        Show password
-                    </label>
-
+                    <label for="showPassword">Show password</label>
                 </div>
 
-                <!-- Password Requirements -->
                 <div class="password-rules">
-
                     <p>Password must contain:</p>
-
-                    <div class="rule" id="length">
-                        At least 8 characters
-                    </div>
-
-                    <div class="rule" id="uppercase">
-                        One uppercase letter (A-Z)
-                    </div>
-
-                    <div class="rule" id="lowercase">
-                        One lowercase letter (a-z)
-                    </div>
-
-                    <div class="rule" id="number">
-                        One number (0-9)
-                    </div>
-
-                    <div class="rule" id="special">
-                        One special character (@$!%*?&)
-                    </div>
-
+                    <div class="rule" id="length">At least 8 characters</div>
+                    <div class="rule" id="uppercase">One uppercase letter (A-Z)</div>
+                    <div class="rule" id="lowercase">One lowercase letter (a-z)</div>
+                    <div class="rule" id="number">One number (0-9)</div>
+                    <div class="rule" id="special">One special character (@$!%*?&)</div>
                 </div>
 
-                <!-- Backend Validation Error -->
                 <p class="form-error"
                    th:if="${#fields.hasErrors('password')}"
                    th:errors="*{password}">
                 </p>
-
             </div>
 
             <button type="submit" class="register-btn">
@@ -149,21 +130,34 @@
         </div>
 
     </div>
-
 </div>
 
 <script>
     const password = document.getElementById("password");
     const showPassword = document.getElementById("showPassword");
+    const role = document.getElementById("role");
+    const adminCodeGroup = document.getElementById("adminCodeGroup");
+    const adminCode = document.getElementById("adminCode");
 
     // Show or hide password
     showPassword.addEventListener("change", function () {
         password.type = this.checked ? "text" : "password";
     });
 
+    // Show admin code only when Admin is selected
+    role.addEventListener("change", function () {
+        const isAdmin = this.value === "ADMIN";
+
+        adminCodeGroup.style.display = isAdmin ? "block" : "none";
+        adminCode.required = isAdmin;
+
+        if (!isAdmin) {
+            adminCode.value = "";
+        }
+    });
+
     // Dynamic password validation
     password.addEventListener("input", function () {
-
         const value = password.value;
 
         document.getElementById("length").classList.toggle(
@@ -185,7 +179,6 @@
         document.getElementById("special").classList.toggle(
             "valid", /[@$!%*?&]/.test(value)
         );
-
     });
 </script>
 

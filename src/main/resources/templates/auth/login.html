@@ -5,9 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Login | DigitalLend</title>
-
     <link rel="stylesheet" th:href="@{/css/auth.css}">
 </head>
 
@@ -15,9 +13,7 @@
 
 <div class="container">
 
-    <!-- Left Information Panel -->
     <div class="left-panel">
-
         <div class="brand">Digital<span>Lend</span></div>
 
         <h1>Welcome Back!</h1>
@@ -34,42 +30,43 @@
             <div class="feature"><span>✓</span> Track your EMI payments</div>
             <div class="feature"><span>✓</span> Access your account anytime</div>
         </div>
-
     </div>
 
-    <!-- Right Login Form -->
     <div class="right-panel">
 
         <h2>Sign In</h2>
+        <p class="subtitle">Enter your account details to continue.</p>
 
-        <p class="subtitle">
-            Enter your account details to continue.
-        </p>
-
-        <!-- Login Error -->
         <div class="message error" th:if="${param.error}">
-            Invalid email or password. Please try again.
+            Invalid email, password or account type. Please try again.
         </div>
 
-        <!-- Logout Message -->
         <div class="message success" th:if="${param.logout}">
             You have logged out successfully.
         </div>
 
-        <!-- Registration Success -->
         <div class="message success" th:if="${param.registered}">
             Registration successful! Please log in.
         </div>
 
         <form th:action="@{/login}" method="post">
 
-            <!-- CSRF Protection -->
             <input type="hidden"
                    th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}">
 
+            <!-- Account Type -->
             <div class="form-group">
+                <label for="role">Login As</label>
 
+                <select id="role" name="role" class="role-select" required>
+                    <option value="BORROWER" selected>Borrower</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
                 <label for="username">Email Address</label>
 
                 <input type="text"
@@ -78,11 +75,10 @@
                        placeholder="Enter your registered email"
                        autocomplete="username"
                        required>
-
             </div>
 
+            <!-- Password -->
             <div class="form-group">
-
                 <label for="password">Password</label>
 
                 <input type="password"
@@ -96,7 +92,6 @@
                     <input type="checkbox" id="showPassword">
                     <label for="showPassword">Show password</label>
                 </div>
-
             </div>
 
             <button type="submit" class="login-btn">
@@ -115,7 +110,6 @@
         </div>
 
     </div>
-
 </div>
 
 <script>
