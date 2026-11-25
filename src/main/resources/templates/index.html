@@ -13,22 +13,10 @@
 
 <body>
 
-<!-- Header -->
-<header class="header">
+<!-- Common Header -->
+<header th:replace="~{fragments/header :: header}"></header>
 
-    <div class="logo">
-        Digital Lending
-    </div>
-
-    <nav class="navbar">
-        <a th:href="@{/}">Home</a>
-        <a th:href="@{/login}">Login</a>
-        <a th:href="@{/register}">Register</a>
-    </nav>
-
-</header>
-
-<!-- Main Section -->
+<!-- Hero Section -->
 <section class="hero">
 
     <h1>Welcome to Digital Lending System</h1>
@@ -45,7 +33,7 @@
 </section>
 
 <!-- Features Section -->
-<section class="features">
+<section id="features" class="features">
 
     <h2>Our Services</h2>
 
@@ -70,10 +58,8 @@
 
 </section>
 
-<!-- Footer -->
-<footer class="footer">
-    <p>© 2026 Digital Lending System. All rights reserved.</p>
-</footer>
+<!-- Common Footer -->
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
 </body>
 </html>
