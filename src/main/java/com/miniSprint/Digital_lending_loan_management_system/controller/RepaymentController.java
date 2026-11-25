@@ -5,10 +5,12 @@ import com.miniSprint.Digital_lending_loan_management_system.service.RepaymentSe
 import com.miniSprint.Digital_lending_loan_management_system.dto.EmiResponse;
 import com.miniSprint.Digital_lending_loan_management_system.entity.User;
 import com.miniSprint.Digital_lending_loan_management_system.entity.Loan;
+import com.miniSprint.Digital_lending_loan_management_system.entity.Repayment;
 import com.miniSprint.Digital_lending_loan_management_system.repository.UserRepository;
 import com.miniSprint.Digital_lending_loan_management_system.repository.LoanRepository;
 
 import jakarta.servlet.http.HttpSession;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +28,7 @@ public class RepaymentController {
     private final UserRepository userRepository;
     private final LoanRepository loanRepository;
 
+    // Constructor injection
     public RepaymentController(
             RepaymentService repaymentService,
             UserRepository userRepository,
@@ -38,20 +41,26 @@ public class RepaymentController {
 
     // Get logged-in borrower
     private User getLoggedInUser(Authentication authentication) {
+
         return userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
     }
 
     // Get borrower's loans
     private List<Loan> getBorrowerLoans(User user) {
+
         return loanRepository.findByBorrower_User_Id(user.getId());
     }
 
     // Get selected loan ID
     private Long getSelectedLoanId(
-            User user, HttpSession session, Model model) {
+            User user,
+            HttpSession session,
+            Model model) {
 
         List<Loan> loans = getBorrowerLoans(user);
+
         model.addAttribute("loans", loans);
 
         if (loans.isEmpty()) {
@@ -64,7 +73,8 @@ public class RepaymentController {
         if (selectedLoanId != null) {
 
             boolean belongsToUser = loans.stream()
-                    .anyMatch(loan -> loan.getId().equals(selectedLoanId));
+                    .anyMatch(loan ->
+                            loan.getId().equals(selectedLoanId));
 
             if (belongsToUser) {
                 return selectedLoanId;
@@ -73,16 +83,20 @@ public class RepaymentController {
             session.removeAttribute("selectedLoanId");
         }
 
+        // Automatically select loan if borrower has only one
         if (loans.size() == 1) {
+
             Long loanId = loans.get(0).getId();
+
             session.setAttribute("selectedLoanId", loanId);
+
             return loanId;
         }
 
         return null;
     }
 
-    // EMI Calculator
+    // 1. Show EMI Calculator
     @GetMapping("/emi")
     public String showEmiCalculator(
             Authentication authentication,
@@ -100,7 +114,7 @@ public class RepaymentController {
         return "borrower/emi-calculator";
     }
 
-    // Select loan when borrower has multiple loans
+    // 2. Select loan when borrower has multiple loans
     @PostMapping("/select-loan")
     public String selectLoan(
             @RequestParam Long loanId,
@@ -115,8 +129,10 @@ public class RepaymentController {
                 .orElse(null);
 
         if (loan == null) {
+
             redirectAttributes.addFlashAttribute(
-                    "errorMessage", "Invalid loan selection");
+                    "errorMessage",
+                    "Invalid loan selection");
 
             return "redirect:/repayments/emi";
         }
@@ -126,7 +142,7 @@ public class RepaymentController {
         return "redirect:/repayments/emi";
     }
 
-    // Calculate EMI
+    // 3. Calculate EMI
     @PostMapping("/emi/calculate")
     public String calculateEMI(
             @RequestParam BigDecimal loanAmount,
@@ -141,7 +157,10 @@ public class RepaymentController {
         Long loanId = getSelectedLoanId(user, session, model);
 
         EmiResponse result = repaymentService.calculateEMI(
-                loanAmount, interestRate, tenureMonths);
+                loanAmount,
+                interestRate,
+                tenureMonths
+        );
 
         model.addAttribute("userEmail", user.getEmail());
         model.addAttribute("emiResult", result);
@@ -154,7 +173,7 @@ public class RepaymentController {
         return "borrower/emi-calculator";
     }
 
-    // Generate repayment schedule
+    // 4. Generate repayment schedule
     @PostMapping("/generate")
     public String generateSchedule(
             Authentication authentication,
@@ -163,20 +182,26 @@ public class RepaymentController {
 
         User user = getLoggedInUser(authentication);
 
-        Long loanId = (Long) session.getAttribute("selectedLoanId");
+        Long loanId =
+                (Long) session.getAttribute("selectedLoanId");
 
         if (loanId == null ||
                 loanRepository.findByIdAndBorrower_User_Id(
                         loanId, user.getId()).isEmpty()) {
 
             redirectAttributes.addFlashAttribute(
-                    "errorMessage", "Please select a valid loan");
+                    "errorMessage",
+                    "Please select a valid loan");
 
             return "redirect:/repayments/emi";
         }
 
         try {
-            repaymentService.generateSchedule(loanId, user.getId());
+
+            repaymentService.generateSchedule(
+                    loanId,
+                    user.getId()
+            );
 
             redirectAttributes.addFlashAttribute(
                     "successMessage",
@@ -185,13 +210,14 @@ public class RepaymentController {
         } catch (RuntimeException e) {
 
             redirectAttributes.addFlashAttribute(
-                    "errorMessage", e.getMessage());
+                    "errorMessage",
+                    e.getMessage());
         }
 
         return "redirect:/repayments/schedule";
     }
 
-    // View repayment schedule
+    // 5. View repayment schedule
     @GetMapping("/schedule")
     public String showSchedule(
             Authentication authentication,
@@ -201,22 +227,46 @@ public class RepaymentController {
 
         User user = getLoggedInUser(authentication);
 
-        Long loanId = (Long) session.getAttribute("selectedLoanId");
+        // Automatically select loan if borrower has only one
+        Long loanId = getSelectedLoanId(user, session, model);
 
-        if (loanId == null ||
-                loanRepository.findByIdAndBorrower_User_Id(
-                        loanId, user.getId()).isEmpty()) {
+        if (loanId == null) {
 
             redirectAttributes.addFlashAttribute(
-                    "errorMessage", "Please select a loan first");
+                    "errorMessage",
+                    "Please select a loan first");
 
             return "redirect:/repayments/emi";
         }
 
-        model.addAttribute(
-                "repayments",
-                repaymentService.getRepaymentHistory(loanId, user.getId()));
+        // Verify loan ownership
+        Loan loan = loanRepository
+                .findByIdAndBorrower_User_Id(
+                        loanId,
+                        user.getId())
+                .orElse(null);
 
+        if (loan == null) {
+
+            session.removeAttribute("selectedLoanId");
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Invalid loan selection");
+
+            return "redirect:/repayments/emi";
+        }
+
+        // Get repayment records
+        List<Repayment> repayments =
+                repaymentService.getRepaymentHistory(
+                        loanId,
+                        user.getId());
+
+        // Pass data to Thymeleaf
+        model.addAttribute("loan", loan);
+        model.addAttribute("repayments", repayments);
+        model.addAttribute("scheduleExists", !repayments.isEmpty());
         model.addAttribute("loanId", loanId);
         model.addAttribute("currentPage", "schedule");
         model.addAttribute("userEmail", user.getEmail());
@@ -224,7 +274,7 @@ public class RepaymentController {
         return "borrower/repayment-schedule";
     }
 
-    // Mark installment as paid
+    // 6. Mark installment as paid
     @PostMapping("/{repaymentId}/pay")
     public String markAsPaid(
             @PathVariable Long repaymentId,
@@ -234,34 +284,42 @@ public class RepaymentController {
 
         User user = getLoggedInUser(authentication);
 
-        Long loanId = (Long) session.getAttribute("selectedLoanId");
+        Long loanId =
+                (Long) session.getAttribute("selectedLoanId");
 
         if (loanId == null ||
                 loanRepository.findByIdAndBorrower_User_Id(
                         loanId, user.getId()).isEmpty()) {
 
             redirectAttributes.addFlashAttribute(
-                    "errorMessage", "Please select a loan first");
+                    "errorMessage",
+                    "Please select a loan first");
 
             return "redirect:/repayments/emi";
         }
 
         try {
-            repaymentService.markAsPaid(repaymentId, user.getId());
+
+            repaymentService.markAsPaid(
+                    repaymentId,
+                    user.getId()
+            );
 
             redirectAttributes.addFlashAttribute(
-                    "successMessage", "Installment paid successfully!");
+                    "successMessage",
+                    "Installment paid successfully!");
 
         } catch (RuntimeException e) {
 
             redirectAttributes.addFlashAttribute(
-                    "errorMessage", e.getMessage());
+                    "errorMessage",
+                    e.getMessage());
         }
 
         return "redirect:/repayments/schedule";
     }
 
-    // View repayment history
+    // 7. View repayment history
     @GetMapping("/history")
     public String showRepaymentHistory(
             Authentication authentication,
@@ -271,22 +329,41 @@ public class RepaymentController {
 
         User user = getLoggedInUser(authentication);
 
-        Long loanId = (Long) session.getAttribute("selectedLoanId");
+        Long loanId = getSelectedLoanId(user, session, model);
 
-        if (loanId == null ||
-                loanRepository.findByIdAndBorrower_User_Id(
-                        loanId, user.getId()).isEmpty()) {
+        if (loanId == null) {
 
             redirectAttributes.addFlashAttribute(
-                    "errorMessage", "Please select a loan first");
+                    "errorMessage",
+                    "Please select a loan first");
 
             return "redirect:/repayments/emi";
         }
 
-        model.addAttribute(
-                "repayments",
-                repaymentService.getRepaymentHistory(loanId, user.getId()));
+        // Verify loan ownership
+        Loan loan = loanRepository
+                .findByIdAndBorrower_User_Id(
+                        loanId,
+                        user.getId())
+                .orElse(null);
 
+        if (loan == null) {
+
+            session.removeAttribute("selectedLoanId");
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Invalid loan selection");
+
+            return "redirect:/repayments/emi";
+        }
+
+        List<Repayment> repayments =
+                repaymentService.getRepaymentHistory(
+                        loanId,
+                        user.getId());
+
+        model.addAttribute("repayments", repayments);
         model.addAttribute("loanId", loanId);
         model.addAttribute("currentPage", "history");
         model.addAttribute("userEmail", user.getEmail());
