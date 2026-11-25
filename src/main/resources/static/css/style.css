@@ -1,0 +1,139 @@
+
+/* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fb;
+    color: #263445;
+}
+
+/* Header */
+.header {
+    background-color: #173b65;
+    color: white;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin-left: 25px;
+    font-size: 16px;
+}
+
+.navbar a:hover {
+    color: #78c4ff;
+}
+
+/* Hero Section */
+.hero {
+    min-height: 420px;
+    background: linear-gradient(135deg, #173b65, #247ac0);
+    color: white;
+    text-align: center;
+    padding: 110px 20px;
+}
+
+.hero h1 {
+    font-size: 38px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 18px;
+    max-width: 650px;
+    margin: 0 auto 30px;
+    line-height: 1.6;
+}
+
+/* Button */
+.btn {
+    display: inline-block;
+    background-color: #ffffff;
+    color: #173b65;
+    padding: 13px 28px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn:hover {
+    background-color: #dceeff;
+}
+
+/* Features */
+.features {
+    padding: 65px 7%;
+    text-align: center;
+}
+
+.features h2 {
+    font-size: 30px;
+    margin-bottom: 35px;
+}
+
+.feature-container {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.feature-card {
+    background-color: white;
+    padding: 30px 20px;
+    width: 280px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card h3 {
+    color: #173b65;
+    margin-bottom: 15px;
+}
+
+.feature-card p {
+    line-height: 1.6;
+    color: #667085;
+}
+
+/* Footer */
+.footer {
+    background-color: #173b65;
+    color: white;
+    text-align: center;
+    padding: 22px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .navbar a {
+        margin: 0 8px;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .hero {
+        padding: 75px 20px;
+    }
+}
