@@ -1,0 +1,343 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Repayment History | Digital Lending</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f7fc;
+            font-family: 'Segoe UI', sans-serif;
+            color: #17243b;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, #14233e, #20375d);
+            padding: 18px 30px;
+        }
+
+        .navbar-brand {
+            font-size: 23px;
+            font-weight: 700;
+            color: white !important;
+        }
+
+        .portal-text {
+            color: #dce7fa;
+            font-weight: 600;
+        }
+
+        .sidebar {
+            background: #172844;
+            min-height: calc(100vh - 72px);
+            padding: 25px 15px;
+        }
+
+        .sidebar h6 {
+            color: #91a5c4;
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #dce5f3;
+            text-decoration: none;
+            padding: 13px 15px;
+            margin-bottom: 10px;
+            border-radius: 9px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: linear-gradient(90deg, #0866e9, #287df5);
+            color: white;
+        }
+
+        .sidebar i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            padding: 35px;
+        }
+
+        .page-title {
+            font-weight: 750;
+        }
+
+        .subtitle {
+            color: #71809a;
+        }
+
+        .content-card {
+            background: white;
+            border: 1px solid #e2e9f4;
+            border-radius: 17px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(25, 48, 82, 0.06);
+        }
+
+        .table thead th {
+            background: #172844;
+            color: white;
+            white-space: nowrap;
+            padding: 15px;
+        }
+
+        .table tbody td {
+            padding: 14px;
+            vertical-align: middle;
+        }
+
+        .table-responsive {
+            border-radius: 10px;
+        }
+
+        .status-paid {
+            background: #d9f7e6;
+            color: #11834b;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fff1cc;
+            color: #a36a00;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(90deg, #0866e9, #287df5);
+            border: none;
+            color: white;
+            padding: 11px 20px;
+            border-radius: 9px;
+            font-weight: 600;
+        }
+
+        .btn-primary-custom:hover {
+            background: #0755c4;
+            color: white;
+        }
+
+        @media(max-width: 767px) {
+            .sidebar {
+                min-height: auto;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark">
+
+    <a class="navbar-brand" th:href="@{/repayments/emi}">
+        <i class="bi bi-bank2"></i>
+        Digital Lending
+    </a>
+
+    <span class="portal-text">
+        <i class="bi bi-person-circle"></i>
+        Borrower Portal
+    </span>
+
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Sidebar -->
+        <aside class="col-md-2 sidebar">
+
+            <h6>MAIN MENU</h6>
+
+            <a th:href="@{/repayments/emi}">
+                <i class="bi bi-calculator"></i>
+                EMI Calculator
+            </a>
+
+            <a th:href="@{/repayments/schedule(loanId=${loanId})}">
+                <i class="bi bi-calendar-check"></i>
+                Repayment Schedule
+            </a>
+
+            <a th:href="@{/repayments/history(loanId=${loanId})}"
+               class="active">
+                <i class="bi bi-clock-history"></i>
+                Repayment History
+            </a>
+
+        </aside>
+
+        <!-- Main Content -->
+        <main class="col-md-10 main-content">
+
+            <h2 class="page-title">
+                <i class="bi bi-clock-history text-primary"></i>
+                Repayment History
+            </h2>
+
+            <p class="subtitle">
+                View your installment records and payment status.
+            </p>
+
+            <!-- Loan ID -->
+            <div class="content-card mt-4 mb-4">
+
+                <div class="row align-items-center">
+
+                    <div class="col-md-6">
+                        <h6 class="text-secondary">Loan ID</h6>
+
+                        <h4 class="fw-bold" th:text="${loanId}"></h4>
+                    </div>
+
+                    <div class="col-md-6 text-md-end">
+
+                        <a th:href="@{/repayments/schedule(loanId=${loanId})}"
+                           class="btn btn-primary-custom">
+
+                            <i class="bi bi-calendar-check"></i>
+                            View Repayment Schedule
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- History Table -->
+            <div class="content-card">
+
+                <h4 class="fw-bold mb-4">
+                    <i class="bi bi-receipt text-primary"></i>
+                    Payment Records
+                </h4>
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-hover">
+
+                        <thead>
+                        <tr>
+                            <th>Installment No.</th>
+                            <th>Due Date</th>
+                            <th>Principal</th>
+                            <th>Interest</th>
+                            <th>EMI Amount</th>
+                            <th>Paid Amount</th>
+                            <th>Payment Date</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        <tr th:each="repayment : ${repayments}">
+
+                            <td th:text="${repayment.installmentNo}"></td>
+
+                            <td th:text="${repayment.dueDate}"></td>
+
+                            <td th:text="${repayment.principalAmount}"></td>
+
+                            <td th:text="${repayment.interestAmount}"></td>
+
+                            <td th:text="${repayment.amount}"></td>
+
+                            <td th:text="${repayment.paidAmount}"></td>
+
+                            <td th:text="${repayment.paidAt != null
+                                ? #temporals.format(repayment.paidAt, 'dd-MM-yyyy HH:mm')
+                                : 'Not paid'}">
+                            </td>
+
+                            <td>
+
+                                <span th:if="${repayment.status.name() == 'PAID'}"
+                                      class="status-paid">
+                                    Paid
+                                </span>
+
+                                <span th:if="${repayment.status.name() == 'PENDING'}"
+                                      class="status-pending">
+                                    Pending
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(repayments)}">
+
+                            <td colspan="8"
+                                class="text-center text-muted py-5">
+
+                                <i class="bi bi-receipt fs-1"></i>
+
+                                <p class="mt-2 mb-0">
+                                    No repayment records available.
+                                </p>
+
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<aside class="col-md-2 sidebar">
+
+    <h6>MAIN MENU</h6>
+
+    <a th:href="@{/repayments/emi(loanId=${loanId})}">
+        <i class="bi bi-calculator"></i>
+        EMI Calculator
+    </a>
+
+    <a th:href="@{/repayments/schedule(loanId=${loanId})}">
+        <i class="bi bi-calendar-check"></i>
+        Repayment Schedule
+    </a>
+
+    <a th:href="@{/repayments/history(loanId=${loanId})}"
+       class="active">
+        <i class="bi bi-clock-history"></i>
+        Repayment History
+    </a>
+
+</aside>
+
+</body>
+</html>
