@@ -57,14 +57,36 @@ public class RepaymentService {
         );
     }
 
-    // 2. Generate monthly repayment schedule
+    // 2A. Generate repayment schedule for ADMIN
+    // Keeps the existing AdminServiceImpl call working.
     @Transactional
     public List<Repayment> generateSchedule(Long loanId) {
 
-        // Find loan by ID
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() ->
                         new RuntimeException("Loan not found"));
+
+        return createSchedule(loan);
+    }
+
+    // 2B. Generate repayment schedule for BORROWER
+    // Verifies that the loan belongs to the logged-in borrower.
+    @Transactional
+    public List<Repayment> generateSchedule(
+            Long loanId, Long userId) {
+
+        Loan loan = loanRepository
+                .findByIdAndBorrower_User_Id(loanId, userId)
+                .orElseThrow(() ->
+                        new RuntimeException("Loan not found"));
+
+        return createSchedule(loan);
+    }
+
+    // Common schedule-generation logic
+    private List<Repayment> createSchedule(Loan loan) {
+
+        Long loanId = loan.getId();
 
         // Check whether schedule already exists
         if (repaymentRepository.existsByLoanId(loanId)) {
@@ -74,9 +96,7 @@ public class RepaymentService {
 
         // Get loan details
         BigDecimal principal = loan.getAmount();
-
         BigDecimal annualRate = loan.getInterestRate();
-
         int months = loan.getTenureMonths();
 
         // Calculate EMI
@@ -155,19 +175,26 @@ public class RepaymentService {
     }
 
     // 3. Retrieve repayment history
-    public List<Repayment> getRepaymentHistory(Long loanId) {
+    // Verifies that the loan belongs to the logged-in borrower.
+    public List<Repayment> getRepaymentHistory(
+            Long loanId, Long userId) {
+
+        loanRepository.findByIdAndBorrower_User_Id(loanId, userId)
+                .orElseThrow(() ->
+                        new RuntimeException("Loan not found"));
 
         return repaymentRepository
                 .findByLoanIdOrderByInstallmentNoAsc(loanId);
     }
 
     // 4. Mark installment as paid
+    // Verifies that the repayment belongs to the logged-in borrower.
     @Transactional
-    public void markAsPaid(Long repaymentId) {
+    public void markAsPaid(Long repaymentId, Long userId) {
 
-        // Find repayment by ID
         Repayment repayment = repaymentRepository
-                .findById(repaymentId)
+                .findByIdAndLoan_Borrower_User_Id(
+                        repaymentId, userId)
                 .orElseThrow(() ->
                         new RuntimeException("Repayment not found"));
 
