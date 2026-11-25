@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Apply for Loan | DigitalLend</title>
+
+    <link rel="stylesheet" th:href="@{/css/borrower.css}">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- Sidebar -->
+    <div th:replace="~{borrower/fragments/sidebar :: sidebar('apply')}"></div>
+
+    <main class="main-content">
+
+        <!-- Header -->
+        <header class="topbar">
+            <div>
+                <h2>Apply for Loan</h2>
+                <p>Submit your loan application details.</p>
+            </div>
+
+            <div class="user-info">
+                <span class="user-email" th:text="${userEmail}">
+                    borrower@email.com
+                </span>
+
+                <a th:href="@{/borrower/profile}"
+                   class="profile-avatar"
+                   title="Edit Profile">
+                    <span>M</span>
+                    <span class="profile-edit-icon">✎</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Messages -->
+        <div class="alert alert-success"
+             th:if="${successMessage}"
+             th:text="${successMessage}">
+        </div>
+
+        <div class="alert alert-danger"
+             th:if="${errorMessage}"
+             th:text="${errorMessage}">
+        </div>
+
+        <!-- Loan Application Form -->
+        <section class="content-card form-card">
+
+            <div class="section-heading">
+                <div>
+                    <h3>Loan Application Form</h3>
+                    <p>Enter the amount and repayment period.</p>
+                </div>
+            </div>
+
+            <div class="loan-note">
+                <strong>Important Information</strong>
+                <p>
+                    Loan amount must be between ₹1,000 and ₹10,00,000.
+                    Loan tenure must be between 3 and 60 months.
+                    Your monthly EMI will be calculated automatically
+                    by the system.
+                </p>
+            </div>
+
+            <form th:action="@{/borrower/apply-loan}"
+                  th:object="${loanRequest}"
+                  method="post">
+
+                <!-- CSRF token -->
+                <input type="hidden"
+                       th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}">
+
+                <div class="form-grid">
+
+                    <!-- Loan Amount -->
+                    <div class="form-group">
+                        <label for="amount">Loan Amount (₹)</label>
+
+                        <input type="number"
+                               id="amount"
+                               th:field="*{amount}"
+                               min="1000"
+                               max="1000000"
+                               step="1000"
+                               placeholder="Enter loan amount"
+                               required>
+
+                        <small class="field-error"
+                               th:errors="*{amount}">
+                        </small>
+                    </div>
+
+                    <!-- Loan Tenure -->
+                    <div class="form-group">
+                        <label for="tenureMonths">
+                            Loan Tenure
+                        </label>
+
+                        <select id="tenureMonths"
+                                th:field="*{tenureMonths}"
+                                required>
+
+                            <option value="">Select tenure</option>
+                            <option value="3">3 Months</option>
+                            <option value="6">6 Months</option>
+                            <option value="12">12 Months</option>
+                            <option value="18">18 Months</option>
+                            <option value="24">24 Months</option>
+                            <option value="36">36 Months</option>
+                            <option value="48">48 Months</option>
+                            <option value="60">60 Months</option>
+
+                        </select>
+
+                        <small class="field-error"
+                               th:errors="*{tenureMonths}">
+                        </small>
+                    </div>
+
+                </div>
+
+                <!-- Loan information -->
+                <div class="loan-note">
+                    <strong>Loan Processing</strong>
+
+                    <p>
+                        After submission, your application status
+                        will initially be APPLIED. The administrator
+                        will review your application and approve or
+                        reject it.
+                    </p>
+                </div>
+
+                <!-- Buttons -->
+                <div class="form-actions">
+
+                    <button type="submit" class="primary-button">
+                        Submit Application
+                    </button>
+
+                    <a th:href="@{/borrower/dashboard}"
+                       class="secondary-button">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
