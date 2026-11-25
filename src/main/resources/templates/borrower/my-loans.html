@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Loans | DigitalLend</title>
+    <link rel="stylesheet" th:href="@{/css/borrower.css}">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <div th:replace="~{borrower/fragments/sidebar :: sidebar('loans')}"></div>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h2>My Loans</h2>
+                <p>View and track all your loan applications.</p>
+            </div>
+            <span class="user-info" th:text="${userEmail}">Email</span>
+        </header>
+
+        <div class="alert alert-success"
+             th:if="${successMessage}"
+             th:text="${successMessage}"></div>
+
+        <section class="content-card">
+
+            <div class="section-heading">
+                <div>
+                    <h3>Loan Applications</h3>
+                    <p>Your loan application history.</p>
+                </div>
+
+                <a th:href="@{/borrower/apply-loan}"
+                   class="primary-button">+ New Application</a>
+            </div>
+
+            <div class="table-responsive">
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Loan ID</th>
+                        <th>Loan Amount</th>
+                        <th>Interest Rate</th>
+                        <th>Tenure</th>
+                        <th>EMI</th>
+                        <th>Status</th>
+                        <th>Applied Date</th>
+                        <th>Details</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="loan : ${loans}">
+
+                        <td th:text="${loan.id}">1</td>
+
+                        <td th:text="${loan.amount}">200000</td>
+
+                        <td th:text="${loan.interestRate + '%'}">12%</td>
+
+                        <td th:text="${loan.tenureMonths + ' months'}">
+                            24 months
+                        </td>
+
+                        <td th:text="${loan.emi}">9414.97</td>
+
+                        <td>
+                            <span class="status"
+                                  th:classappend="${#strings.toLowerCase(loan.status.name())}"
+                                  th:text="${loan.status}">
+                                APPLIED
+                            </span>
+                        </td>
+
+                        <td th:text="${loan.appliedDate}">2026-11-25</td>
+
+                        <td>
+                            <a th:href="@{/borrower/loans/{id}(id=${loan.id})}"
+                               class="text-link">View</a>
+                        </td>
+
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(loans)}">
+                        <td colspan="8" class="empty-state">
+                            No loan applications found.
+                            <a th:href="@{/borrower/apply-loan}">
+                                Apply for your first loan
+                            </a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

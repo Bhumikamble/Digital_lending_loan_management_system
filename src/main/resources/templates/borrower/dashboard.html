@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borrower Dashboard | DigitalLend</title>
+    <link rel="stylesheet" th:href="@{/css/borrower.css}">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <div th:replace="~{borrower/fragments/sidebar :: sidebar('dashboard')}"></div>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h2>Borrower Dashboard</h2>
+                <p>Manage your profile and loan applications.</p>
+            </div>
+
+            <div class="user-info">
+                <span class="user-avatar">B</span>
+                <span th:text="${userEmail}">borrower@email.com</span>
+            </div>
+        </header>
+
+        <section class="welcome-section">
+            <div>
+                <h1>Welcome back!</h1>
+                <p>Here is an overview of your lending account.</p>
+            </div>
+
+            <a th:href="@{/borrower/apply-loan}" class="primary-button">
+                + Apply for Loan
+            </a>
+        </section>
+
+        <div class="alert alert-warning" th:if="${!profileCompleted}">
+            <strong>Complete your profile first.</strong>
+            You need a borrower profile before applying for a loan.
+            <a th:href="@{/borrower/profile}">Complete Profile</a>
+        </div>
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-icon blue">▤</div>
+                <p>Total Applications</p>
+                <h2 th:text="${totalLoans}">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange">◷</div>
+                <p>Pending Applications</p>
+                <h2 th:text="${pendingLoans}">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">✓</div>
+                <p>Approved Loans</p>
+                <h2 th:text="${approvedLoans}">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon red">×</div>
+                <p>Rejected Loans</p>
+                <h2 th:text="${rejectedLoans}">0</h2>
+            </div>
+
+        </section>
+
+        <section class="content-card">
+
+            <div class="section-heading">
+                <div>
+                    <h3>Recent Loan Applications</h3>
+                    <p>Track the status of your applications.</p>
+                </div>
+
+                <a th:href="@{/borrower/my-loans}" class="text-link">
+                    View All
+                </a>
+            </div>
+
+            <div class="table-responsive">
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Loan ID</th>
+                        <th>Amount</th>
+                        <th>Tenure</th>
+                        <th>Monthly EMI</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="loan : ${loans}">
+                        <td th:text="${loan.id}">1</td>
+
+                        <td th:text="${loan.amount}">200000</td>
+
+                        <td th:text="${loan.tenureMonths + ' months'}">
+                            24 months
+                        </td>
+
+                        <td th:text="${loan.emi}">9414.97</td>
+
+                        <td>
+                            <span class="status"
+                                  th:classappend="${#strings.toLowerCase(loan.status.name())}"
+                                  th:text="${loan.status}">
+                                APPLIED
+                            </span>
+                        </td>
+
+                        <td>
+                            <a class="text-link"
+                               th:href="@{/borrower/loans/{id}(id=${loan.id})}">
+                                Details
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(loans)}">
+                        <td colspan="6" class="empty-state">
+                            You haven't applied for any loans yet.
+                            <a th:href="@{/borrower/apply-loan}">
+                                Apply now
+                            </a>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

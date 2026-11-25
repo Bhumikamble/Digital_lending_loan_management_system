@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<aside th:fragment="sidebar(activePage)" class="sidebar">
+
+    <div class="brand">
+        <span class="brand-icon">D</span>
+        <div>
+            <h2>DigitalLend</h2>
+            <small>Borrower Portal</small>
+        </div>
+    </div>
+
+    <div class="sidebar-label">MAIN MENU</div>
+
+    <nav class="sidebar-nav">
+
+        <a th:href="@{/borrower/dashboard}"
+           th:classappend="${activePage == 'dashboard'} ? ' active' : ''">
+            <span>▦</span> Dashboard
+        </a>
+
+        <a th:href="@{/borrower/profile}"
+           th:classappend="${activePage == 'profile'} ? ' active' : ''">
+            <span>♙</span> My Profile
+        </a>
+
+        <a th:href="@{/borrower/apply-loan}"
+           th:classappend="${activePage == 'apply'} ? ' active' : ''">
+            <span>＋</span> Apply for Loan
+        </a>
+
+        <a th:href="@{/borrower/my-loans}"
+           th:classappend="${activePage == 'loans'} ? ' active' : ''">
+            <span>▤</span> My Loans
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+        <form th:action="@{/logout}" method="post">
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}">
+
+            <button type="submit" class="logout-button">
+                ⇥ Logout
+            </button>
+        </form>
+    </div>
+
+</aside>
+
+</body>
+</html>
