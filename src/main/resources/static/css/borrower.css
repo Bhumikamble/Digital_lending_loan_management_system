@@ -712,3 +712,106 @@ td {
 
     font-size: 11px;
 }
+
+
+
+/* Sidebar navigation alignment */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.sidebar-nav > a {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 48px;
+    padding: 13px 18px;
+    margin: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    border-radius: 9px;
+    color: #dce5f3;
+    font-size: 15px;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.sidebar-nav > a:hover,
+.sidebar-nav > a.active {
+    background: #3159b8;
+    color: #ffffff;
+}
+
+/* EMI dropdown */
+.sidebar-dropdown {
+    width: 100%;
+    margin: 0;
+}
+
+.sidebar-dropdown-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 48px;
+    padding: 13px 18px;
+    box-sizing: border-box;
+    color: #dce5f3;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 9px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.sidebar-dropdown-title::-webkit-details-marker {
+    display: none;
+}
+
+.sidebar-dropdown-title:hover,
+.sidebar-dropdown[open] > .sidebar-dropdown-title {
+    background: #263e67;
+    color: #ffffff;
+}
+
+/* Dropdown arrow */
+.dropdown-arrow {
+    margin-left: auto;
+    font-size: 17px;
+    transition: transform 0.2s ease;
+}
+
+.sidebar-dropdown[open] .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* Submenu alignment */
+.sidebar-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 8px 0 5px 18px;
+}
+
+.sidebar-submenu a {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+    width: 100%;
+    padding: 10px 14px;
+    box-sizing: border-box;
+    color: #c4d2e8;
+    font-size: 14px;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.sidebar-submenu a:hover,
+.sidebar-submenu a.active {
+    background: #3159b8;
+    color: #ffffff;
+}

@@ -54,6 +54,7 @@ public class SecurityConfig {
                         ).hasRole("BORROWER")
 
                         // All other URLs require authentication
+                        .requestMatchers("/repayments/**").hasRole("BORROWER")
                         .anyRequest().authenticated()
                 )
 
