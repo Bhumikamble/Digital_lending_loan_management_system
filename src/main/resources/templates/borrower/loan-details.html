@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Details | DigitalLend</title>
+    <link rel="stylesheet" th:href="@{/css/borrower.css}">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <div th:replace="~{borrower/fragments/sidebar :: sidebar('loans')}"></div>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h2>Loan Details</h2>
+                <p>Review your loan application information.</p>
+            </div>
+            <span class="user-info" th:text="${userEmail}">Email</span>
+        </header>
+
+        <section class="content-card">
+
+            <div class="section-heading">
+                <div>
+                    <h3>
+                        Loan #<span th:text="${loan.id}">1</span>
+                    </h3>
+                    <p>Application details and current status.</p>
+                </div>
+
+                <span class="status"
+                      th:classappend="${#strings.toLowerCase(loan.status.name())}"
+                      th:text="${loan.status}">
+                    APPLIED
+                </span>
+            </div>
+
+            <div class="details-grid">
+
+                <div class="detail-item">
+                    <span>Loan Amount</span>
+                    <strong th:text="${loan.amount}">200000</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Annual Interest Rate</span>
+                    <strong th:text="${loan.interestRate + '%'}">12%</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Loan Tenure</span>
+                    <strong th:text="${loan.tenureMonths + ' months'}">
+                        24 months
+                    </strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Monthly EMI</span>
+                    <strong th:text="${loan.emi}">9414.97</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Application Date</span>
+                    <strong th:text="${loan.appliedDate}">2026-11-25</strong>
+                </div>
+
+                <div class="detail-item">
+                    <span>Application Status</span>
+                    <strong th:text="${loan.status}">APPLIED</strong>
+                </div>
+
+            </div>
+
+            <div class="remark-box"
+                 th:if="${loan.adminRemark != null and !#strings.isEmpty(loan.adminRemark)}">
+
+                <h4>Admin Remark</h4>
+
+                <p th:text="${loan.adminRemark}">
+                    Admin remark will appear here.
+                </p>
+
+            </div>
+
+            <div class="loan-note"
+                 th:if="${loan.status.name() == 'APPLIED'}">
+                Your loan application is awaiting admin review.
+            </div>
+
+            <div class="loan-note"
+                 th:if="${loan.status.name() == 'APPROVED'}">
+                Congratulations! Your loan has been approved.
+            </div>
+
+            <div class="loan-note"
+                 th:if="${loan.status.name() == 'REJECTED'}">
+                Your loan application has been rejected.
+                Please review the admin remark above.
+            </div>
+
+            <div class="form-actions">
+                <a th:href="@{/borrower/my-loans}"
+                   class="secondary-button">
+                    Back to My Loans
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -21,4 +21,13 @@ public class RegisterRequest {
             message = "Password must contain 8 characters, uppercase, lowercase, number and special character"
     )
     private String password;
+
+    @NotBlank(message = "Please select a role")
+    @Pattern(
+            regexp = "BORROWER|ADMIN",
+            message = "Please select a valid role"
+    )
+    private String role;
+
+    private String adminCode;
 }
