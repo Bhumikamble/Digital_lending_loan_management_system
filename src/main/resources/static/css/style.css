@@ -137,3 +137,112 @@ body {
         padding: 75px 20px;
     }
 }
+
+
+
+
+/* Common Application Messages */
+.alert-success,
+.alert-error {
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.alert-success {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+.alert-error {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+}
+
+
+
+
+/* Custom Error Pages */
+.error-container {
+    min-height: calc(100vh - 180px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+    background: linear-gradient(135deg, #f4f7fb, #e1edfa);
+}
+
+.error-card {
+    width: 100%;
+    max-width: 600px;
+    background: #ffffff;
+    padding: 50px 35px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(23, 59, 101, 0.12);
+}
+
+.error-icon {
+    font-size: 55px;
+    margin-bottom: 15px;
+}
+
+.error-code {
+    font-size: 100px;
+    font-weight: 800;
+    color: #173b65;
+    line-height: 1.1;
+    margin-bottom: 15px;
+}
+
+.error-card h2 {
+    font-size: 28px;
+    color: #173b65;
+    margin-bottom: 18px;
+}
+
+.error-card p {
+    color: #64748b;
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.error-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.error-btn {
+    display: inline-block;
+    background: #247ac0;
+    color: #ffffff;
+    padding: 13px 25px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.error-btn:hover {
+    background: #173b65;
+}
+
+@media (max-width: 600px) {
+    .error-card {
+        padding: 35px 20px;
+    }
+
+    .error-code {
+        font-size: 75px;
+    }
+
+    .error-card h2 {
+        font-size: 23px;
+    }
+}
