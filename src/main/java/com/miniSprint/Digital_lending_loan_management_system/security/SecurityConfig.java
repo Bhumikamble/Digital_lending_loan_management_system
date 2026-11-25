@@ -28,9 +28,32 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register", "/login").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/borrower/**").hasRole("BORROWER")
+
+                        // Public pages and static resources
+                        .requestMatchers(
+                                "/register",
+                                "/login",
+                                "/css/**",
+                                "/js/**",
+                                "/images/**",
+                                "/webjars/**",
+                                "/favicon.ico"
+                        ).permitAll()
+
+                        // Admin web pages and REST APIs
+                        .requestMatchers(
+                                "/admin/**",
+                                "/api/admin/**"
+                        ).hasRole("ADMIN")
+
+                        // Borrower web pages and REST APIs
+                        .requestMatchers(
+                                "/borrower/**",
+                                "/api/borrower/**",
+                                "/api/loans/**"
+                        ).hasRole("BORROWER")
+
+                        // All other URLs require authentication
                         .anyRequest().authenticated()
                 )
 

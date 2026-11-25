@@ -274,4 +274,21 @@ input:focus {
     .right-panel {
         padding: 35px 25px;
     }
+    /* Role Selection */
+    .role-select {
+        width: 100%;
+        padding: 14px 15px;
+        border: 1px solid #d9e2ec;
+        border-radius: 9px;
+        outline: none;
+        background: #ffffff;
+        color: #263b59;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .role-select:focus {
+        border-color: #087e9b;
+        box-shadow: 0 0 0 3px rgba(8, 126, 155, 0.12);
+    }
 }
