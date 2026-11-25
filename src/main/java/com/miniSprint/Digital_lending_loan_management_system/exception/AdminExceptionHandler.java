@@ -3,6 +3,7 @@ package com.miniSprint.Digital_lending_loan_management_system.exception;
 import com.miniSprint.Digital_lending_loan_management_system.controller.AdminController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -33,5 +34,21 @@ public class AdminExceptionHandler {
 
         return ResponseEntity.badRequest()
                 .body(Map.of("message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationException(
+            MethodArgumentNotValidException ex) {
+
+        String message = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getDefaultMessage())
+                .filter(msg -> msg != null)
+                .findFirst()
+                .orElse("Validation failed");
+
+        return ResponseEntity.badRequest()
+                .body(Map.of("message", message));
     }
 }
