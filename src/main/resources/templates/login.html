@@ -8,239 +8,14 @@
 
     <title>Login | DigitalLend</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #07152e, #123c69, #176b87);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 25px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1050px;
-            min-height: 600px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            background: white;
-            border-radius: 22px;
-            overflow: hidden;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
-        }
-
-        .left-panel {
-            background: linear-gradient(145deg, #09254b, #087e9b);
-            color: white;
-            padding: 55px 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .brand {
-            font-size: 25px;
-            font-weight: 700;
-            margin-bottom: 55px;
-        }
-
-        .brand span {
-            color: #65e5dc;
-        }
-
-        .left-panel h1 {
-            font-size: 38px;
-            line-height: 1.25;
-            margin-bottom: 20px;
-        }
-
-        .left-panel p {
-            color: #d2e5f2;
-            font-size: 16px;
-            line-height: 1.8;
-        }
-
-        .features {
-            margin-top: 35px;
-        }
-
-        .feature {
-            margin-bottom: 18px;
-            font-size: 15px;
-            color: #e5f6ff;
-        }
-
-        .feature span {
-            color: #65e5dc;
-            margin-right: 10px;
-        }
-
-        .right-panel {
-            padding: 55px 50px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .right-panel h2 {
-            font-size: 30px;
-            color: #10294c;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            color: #718096;
-            margin-bottom: 35px;
-            font-size: 14px;
-        }
-
-        .message {
-            padding: 13px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 13px;
-        }
-
-        .success {
-            background: #e9f9ef;
-            color: #16834a;
-        }
-
-        .error {
-            background: #fff0f0;
-            color: #c62828;
-        }
-
-        .form-group {
-            margin-bottom: 23px;
-        }
-
-        label {
-            display: block;
-            color: #263b59;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 9px;
-        }
-
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #d9e2ec;
-            border-radius: 9px;
-            outline: none;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-
-        input:focus {
-            border-color: #087e9b;
-            box-shadow: 0 0 0 3px rgba(8, 126, 155, 0.12);
-        }
-
-        .show-password {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        .show-password input {
-            accent-color: #087e9b;
-        }
-
-        .show-password label {
-            margin: 0;
-            font-weight: normal;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 9px;
-            background: linear-gradient(90deg, #087e9b, #1056a0);
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 8px;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(8, 126, 155, 0.3);
-        }
-
-        .register-link {
-            text-align: center;
-            margin-top: 28px;
-            color: #718096;
-            font-size: 14px;
-        }
-
-        .register-link a {
-            color: #087e9b;
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 35px;
-            color: #a0aec0;
-            font-size: 12px;
-        }
-
-        @media (max-width: 750px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-
-            .left-panel {
-                padding: 30px;
-            }
-
-            .brand {
-                margin-bottom: 25px;
-            }
-
-            .left-panel h1 {
-                font-size: 28px;
-            }
-
-            .features {
-                margin-top: 20px;
-            }
-
-            .right-panel {
-                padding: 35px 25px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
 </head>
 
 <body>
 
 <div class="container">
 
-    <!-- Left side information panel -->
+    <!-- Left Information Panel -->
     <div class="left-panel">
 
         <div class="brand">Digital<span>Lend</span></div>
@@ -262,7 +37,7 @@
 
     </div>
 
-    <!-- Right side login form -->
+    <!-- Right Login Form -->
     <div class="right-panel">
 
         <h2>Sign In</h2>
@@ -271,20 +46,24 @@
             Enter your account details to continue.
         </p>
 
+        <!-- Login Error -->
         <div class="message error" th:if="${param.error}">
             Invalid email or password. Please try again.
         </div>
 
+        <!-- Logout Message -->
         <div class="message success" th:if="${param.logout}">
             You have logged out successfully.
         </div>
 
+        <!-- Registration Success -->
         <div class="message success" th:if="${param.registered}">
             Registration successful! Please log in.
         </div>
 
         <form th:action="@{/login}" method="post">
 
+            <!-- CSRF Protection -->
             <input type="hidden"
                    th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}">
@@ -314,13 +93,8 @@
                        required>
 
                 <div class="show-password">
-
                     <input type="checkbox" id="showPassword">
-
-                    <label for="showPassword">
-                        Show password
-                    </label>
-
+                    <label for="showPassword">Show password</label>
                 </div>
 
             </div>
