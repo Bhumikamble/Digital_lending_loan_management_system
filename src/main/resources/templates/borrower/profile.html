@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile | Digital Lending</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <!-- Borrower CSS -->
+    <link rel="stylesheet"
+          th:href="@{/css/borrower.css}">
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark px-4">
+
+    <a class="navbar-brand" th:href="@{/borrower/dashboard}">
+        <i class="bi bi-bank2"></i>
+        Digital Lending
+    </a>
+
+    <span class="text-white">Borrower Portal</span>
+
+</nav>
+
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <!-- Sidebar -->
+        <aside class="col-md-2 sidebar bg-dark text-white p-3">
+
+            <h6 class="text-secondary mb-4">
+                MAIN MENU
+            </h6>
+
+            <a th:href="@{/borrower/dashboard}"
+               class="nav-link">
+
+                <i class="bi bi-speedometer2"></i>
+                Dashboard
+
+            </a>
+
+            <a th:href="@{/borrower/profile}"
+               class="nav-link active">
+
+                <i class="bi bi-person-circle"></i>
+                My Profile
+
+            </a>
+
+            <a th:href="@{/borrower/profile/edit}"
+               class="nav-link">
+
+                <i class="bi bi-pencil-square"></i>
+                Edit Profile
+
+            </a>
+
+            <a th:href="@{/borrower/loans/apply}"
+               class="nav-link">
+
+                <i class="bi bi-file-earmark-plus"></i>
+                Apply for Loan
+
+            </a>
+
+            <a th:href="@{/borrower/loans}"
+               class="nav-link">
+
+                <i class="bi bi-file-earmark-text"></i>
+                My Loans
+
+            </a>
+
+
+            <!-- Logout -->
+            <form th:action="@{/logout}" method="post">
+
+                <button type="submit"
+                        class="btn btn-outline-light mt-4 w-100">
+
+                    <i class="bi bi-box-arrow-right"></i>
+                    Logout
+
+                </button>
+
+            </form>
+
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="col-md-10 p-4">
+
+            <h2 class="fw-bold">
+                My Profile
+            </h2>
+
+            <p class="text-muted">
+                View your personal and employment information.
+            </p>
+
+
+            <!-- Profile Card -->
+            <div class="card shadow-sm mt-4">
+
+                <div class="card-header bg-white p-3">
+
+                    <div class="d-flex justify-content-between
+                                align-items-center">
+
+                        <h5 class="mb-0">
+
+                            <i class="bi bi-person-vcard text-primary"></i>
+
+                            Personal Information
+
+                        </h5>
+
+                        <a th:href="@{/borrower/profile/edit}"
+                           class="btn btn-primary btn-sm">
+
+                            <i class="bi bi-pencil-square"></i>
+                            Edit Profile
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body p-4">
+
+                    <!-- Profile Icon -->
+                    <div class="text-center mb-4">
+
+                        <i class="bi bi-person-circle text-primary"
+                           style="font-size: 75px;">
+                        </i>
+
+                        <h4 class="mt-2"
+                            th:text="${profile.fullName}">
+                            Borrower Name
+                        </h4>
+
+                        <p class="text-muted"
+                           th:text="${profile.user.email}">
+                            borrower@email.com
+                        </p>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <!-- Profile Details -->
+                    <div class="row g-4 mt-2">
+
+                        <div class="col-md-6">
+
+                            <label class="text-muted">
+                                Full Name
+                            </label>
+
+                            <h6 th:text="${profile.fullName}">
+                                Name
+                            </h6>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="text-muted">
+                                Email Address
+                            </label>
+
+                            <h6 th:text="${profile.user.email}">
+                                Email
+                            </h6>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="text-muted">
+                                Phone Number
+                            </label>
+
+                            <h6 th:text="${profile.phone}">
+                                Phone
+                            </h6>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="text-muted">
+                                Date of Birth
+                            </label>
+
+                            <h6 th:text="${profile.dateOfBirth != null ? #temporals.format(profile.dateOfBirth, 'dd-MM-yyyy') : 'Not provided'}">
+                                DOB
+                            </h6>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="text-muted">
+                                Employment Type
+                            </label>
+
+                            <h6 th:text="${profile.employmentType}">
+                                Employment
+                            </h6>
+
+                        </div>
+
+
+                        <div class="col-md-6">
+
+                            <label class="text-muted">
+                                Monthly Income
+                            </label>
+
+                            <h6 th:text="${'₹' + #numbers.formatDecimal(profile.monthlyIncome, 1, 'COMMA', 2, 'POINT')}">
+                                Income
+                            </h6>
+
+                        </div>
+
+
+                        <div class="col-12">
+
+                            <label class="text-muted">
+                                Address
+                            </label>
+
+                            <h6 th:text="${profile.address}">
+                                Address
+                            </h6>
+
+                        </div>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <div class="text-end">
+
+                        <a th:href="@{/borrower/dashboard}"
+                           class="btn btn-outline-secondary">
+
+                            <i class="bi bi-arrow-left"></i>
+                            Back to Dashboard
+
+                        </a>
+
+                        <a th:href="@{/borrower/profile/edit}"
+                           class="btn btn-primary">
+
+                            <i class="bi bi-pencil"></i>
+                            Update Profile
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Footer -->
+            <footer class="text-center text-muted mt-5 mb-3">
+
+                Digital Lending &middot; Borrower Portal
+
+            </footer>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+</body>
+</html>
