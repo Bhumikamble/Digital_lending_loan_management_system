@@ -22,14 +22,12 @@ public class AuthController {
         this.authService = authService;
     }
 
-    // Display registration page
     @GetMapping("/register")
     public String showRegisterPage(Model model) {
         model.addAttribute("registerRequest", new RegisterRequest());
-        return "register";
+        return "auth/register";
     }
 
-    // Handle registration form submission
     @PostMapping("/register")
     public String registerUser(
             @Valid @ModelAttribute("registerRequest") RegisterRequest request,
@@ -37,26 +35,27 @@ public class AuthController {
             Model model) {
 
         if (result.hasErrors()) {
-            return "register";
+            return "auth/register";
         }
 
         try {
             authService.registerUser(
                     request.getEmail(),
-                    request.getPassword()
+                    request.getPassword(),
+                    request.getRole(),
+                    request.getAdminCode()
             );
 
             return "redirect:/login?registered";
 
         } catch (RuntimeException exception) {
             model.addAttribute("error", exception.getMessage());
-            return "register";
+            return "auth/register";
         }
     }
 
-    // Display login page
     @GetMapping("/login")
     public String showLoginPage() {
-        return "login";
+        return "auth/login";
     }
 }
