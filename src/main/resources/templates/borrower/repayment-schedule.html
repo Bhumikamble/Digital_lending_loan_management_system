@@ -476,11 +476,9 @@
 
                             <!-- Payment Action -->
                             <td>
-
-                                <form th:if="${loan.status.name() == 'APPROVED'
-                                    and repayment.status.name() == 'PENDING'
-                                    and repayment.dueDate != null
-                                    and !repayment.dueDate.isAfter(T(java.time.LocalDate).now())}"
+                                <form th:if="${paymentAllowed
+              and repayment.status.name() == 'PENDING'
+              and repayment.id == nextPayableId}"
                                       th:action="@{/repayments/{id}/pay(id=${repayment.id})}"
                                       method="post">
 
@@ -493,17 +491,24 @@
 
                                 <span th:if="${repayment.status.name() == 'PAID'}"
                                       class="text-success fw-semibold">
-                                    <i class="bi bi-check-circle-fill"></i>
-                                    Completed
-                                </span>
+    <i class="bi bi-check-circle-fill"></i>
+    Completed
+</span>
 
-                                <span th:if="${repayment.status.name() == 'PENDING'
-                                    and repayment.dueDate != null
-                                    and repayment.dueDate.isAfter(T(java.time.LocalDate).now())}"
-                                      class="text-muted">
-                                    Not Due
-                                </span>
+                                <span th:if="${paymentAllowed
+              and repayment.status.name() == 'PENDING'
+              and repayment.id != nextPayableId}"
+                                      class="text-muted"
+                                      title="Pay the previous installment first">
+    <i class="bi bi-lock-fill"></i>
+    Locked
+</span>
 
+                                <span th:if="${!paymentAllowed
+              and repayment.status.name() == 'PENDING'}"
+                                      class="text-danger fw-semibold">
+    Payment unavailable
+</span>
                             </td>
 
                         </tr>
@@ -546,8 +551,9 @@
                 </h6>
 
                 <p class="mb-0">
-                    Please make your EMI payments on or before the due date.
-                    Only installments that are due can be marked as paid.
+                    You can pay your EMI before or on the due date.
+                    Installments must be paid sequentially.
+                    The next installment becomes available once the previous installment is paid.
                     Contact the administrator if you have any questions
                     regarding your repayment schedule.
                 </p>

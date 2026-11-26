@@ -1,11 +1,9 @@
 
 package com.miniSprint.Digital_lending_loan_management_system.controller;
 
+import com.miniSprint.Digital_lending_loan_management_system.entity.*;
 import com.miniSprint.Digital_lending_loan_management_system.service.RepaymentService;
 import com.miniSprint.Digital_lending_loan_management_system.dto.EmiResponse;
-import com.miniSprint.Digital_lending_loan_management_system.entity.User;
-import com.miniSprint.Digital_lending_loan_management_system.entity.Loan;
-import com.miniSprint.Digital_lending_loan_management_system.entity.Repayment;
 import com.miniSprint.Digital_lending_loan_management_system.repository.UserRepository;
 import com.miniSprint.Digital_lending_loan_management_system.repository.LoanRepository;
 
@@ -262,7 +260,19 @@ public class RepaymentController {
                 repaymentService.getRepaymentHistory(
                         loanId,
                         user.getId());
+        Long nextPayableId = repayments.stream()
+                .filter(r -> r.getStatus() == RepaymentStatus.PENDING)
+                .map(Repayment::getId)
+                .findFirst()
+                .orElse(null);
 
+        boolean paymentAllowed =
+                loan.getStatus() == LoanStatus.APPROVED;
+
+        model.addAttribute("nextPayableId",
+                paymentAllowed ? nextPayableId : null);
+
+        model.addAttribute("paymentAllowed", paymentAllowed);
         // Pass data to Thymeleaf
         model.addAttribute("loan", loan);
         model.addAttribute("repayments", repayments);
