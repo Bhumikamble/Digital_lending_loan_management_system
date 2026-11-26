@@ -28,16 +28,20 @@
             </div>
 
             <div class="user-info">
-                <span class="user-email" th:text="${userEmail}">
-                    borrower@email.com
-                </span>
 
+                <!-- Circular profile avatar only -->
                 <a th:href="@{/borrower/profile}"
                    class="profile-avatar"
-                   title="Edit Profile">
-                    <span>M</span>
-                    <span class="profile-edit-icon">✎</span>
+                   aria-label="Profile">
+
+        <span th:text="${profile != null and profile.fullName != null and !#strings.isEmpty(profile.fullName)
+            ? #strings.toUpperCase(#strings.substring(profile.fullName, 0, 1))
+            : #strings.toUpperCase(#strings.substring(userEmail, 0, 1))}">
+            M
+        </span>
+
                 </a>
+
             </div>
         </header>
 
