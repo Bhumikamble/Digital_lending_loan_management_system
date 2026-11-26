@@ -19,23 +19,52 @@
 
         <a th:href="@{/borrower/dashboard}"
            th:classappend="${activePage == 'dashboard'} ? ' active' : ''">
-            <span>▦</span> Dashboard
+            Dashboard
         </a>
 
         <a th:href="@{/borrower/profile}"
            th:classappend="${activePage == 'profile'} ? ' active' : ''">
-            <span>♙</span> My Profile
+            My Profile
         </a>
 
         <a th:href="@{/borrower/apply-loan}"
            th:classappend="${activePage == 'apply'} ? ' active' : ''">
-            <span>＋</span> Apply for Loan
+            Apply for Loan
         </a>
 
         <a th:href="@{/borrower/my-loans}"
            th:classappend="${activePage == 'loans'} ? ' active' : ''">
-            <span>▤</span> My Loans
+            My Loans
         </a>
+
+        <!-- EMI & Repayment Dropdown -->
+        <details class="sidebar-dropdown"
+                 th:open="${activePage == 'emi' or activePage == 'schedule' or activePage == 'history'}">
+
+            <summary class="sidebar-dropdown-title">
+                EMI &amp; Repayment
+                <span class="dropdown-arrow">⌄</span>
+            </summary>
+
+            <div class="sidebar-submenu">
+
+                <a th:href="@{/repayments/emi}"
+                   th:classappend="${activePage == 'emi'} ? ' active' : ''">
+                    EMI Calculator
+                </a>
+
+                <a th:href="@{/repayments/schedule}"
+                   th:classappend="${activePage == 'schedule'} ? ' active' : ''">
+                    Repayment Schedule
+                </a>
+
+                <a th:href="@{/repayments/history}"
+                   th:classappend="${activePage == 'history'} ? ' active' : ''">
+                    Repayment History
+                </a>
+
+            </div>
+        </details>
 
     </nav>
 
@@ -46,7 +75,7 @@
                    th:value="${_csrf.token}">
 
             <button type="submit" class="logout-button">
-                ⇥ Logout
+                Logout
             </button>
         </form>
     </div>
