@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Borrower Sidebar -->
+<aside th:fragment="borrowerSidebar" class="sidebar">
+
+    <h3>Borrower Panel</h3>
+
+    <a th:href="@{/borrower/dashboard}">Dashboard</a>
+    <a th:href="@{/borrower/profile}">My Profile</a>
+    <a th:href="@{/borrower/apply-loan}">Apply for Loan</a>
+    <a th:href="@{/borrower/loans}">My Loans</a>
+    <a th:href="@{/borrower/repayments}">Repayments</a>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="logout-btn">
+            Logout
+        </button>
+    </form>
+
+</aside>
+
+<!-- Admin Sidebar -->
+<aside th:fragment="adminSidebar" class="sidebar">
+
+    <h3>Admin Panel</h3>
+
+    <a th:href="@{/admin/dashboard}">Dashboard</a>
+
+    <a th:href="@{/admin/loans}">All Applications</a>
+
+    <a th:href="@{/admin/loans(status='PENDING')}">
+        Pending Loans
+    </a>
+
+    <a th:href="@{/admin/loans(status='APPROVED')}">
+        Approved Loans
+    </a>
+
+    <a th:href="@{/admin/loans(status='REJECTED')}">
+        Rejected Loans
+    </a>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="logout-btn">
+            Logout
+        </button>
+    </form>
+
+</aside>
+
+</body>
+</html>
