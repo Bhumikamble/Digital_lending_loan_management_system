@@ -2,16 +2,25 @@ package com.miniSprint.Digital_lending_loan_management_system.service;
 
 import com.miniSprint.Digital_lending_loan_management_system.dto.response.AdminDashboardResponse;
 import com.miniSprint.Digital_lending_loan_management_system.dto.response.AdminLoanResponse;
+import com.miniSprint.Digital_lending_loan_management_system.dto.response.AdminLoanDetailsResponse;
+import com.miniSprint.Digital_lending_loan_management_system.dto.response.AdminRepaymentResponse;
+
 import com.miniSprint.Digital_lending_loan_management_system.entity.Loan;
 import com.miniSprint.Digital_lending_loan_management_system.entity.LoanStatus;
+import com.miniSprint.Digital_lending_loan_management_system.entity.Repayment;
+import com.miniSprint.Digital_lending_loan_management_system.entity.RepaymentStatus;
+
 import com.miniSprint.Digital_lending_loan_management_system.exception.InvalidLoanStateException;
 import com.miniSprint.Digital_lending_loan_management_system.exception.LoanNotFoundException;
+
 import com.miniSprint.Digital_lending_loan_management_system.repository.LoanRepository;
+import com.miniSprint.Digital_lending_loan_management_system.repository.RepaymentRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 
@@ -22,16 +31,19 @@ public class AdminServiceImpl implements AdminService {
     private final LoanRepository loanRepository;
     private final RepaymentService repaymentService;
     private final EmiCalculator emiCalculator;
+    private final RepaymentRepository repaymentRepository;
 
     // Constructor Injection
     public AdminServiceImpl(
             LoanRepository loanRepository,
             RepaymentService repaymentService,
-            EmiCalculator emiCalculator) {
+            EmiCalculator emiCalculator,
+            RepaymentRepository repaymentRepository) {
 
         this.loanRepository = loanRepository;
         this.repaymentService = repaymentService;
         this.emiCalculator = emiCalculator;
+        this.repaymentRepository = repaymentRepository;
     }
 
     // 1. Dashboard Statistics
@@ -166,7 +178,87 @@ public class AdminServiceImpl implements AdminService {
         return mapToResponse(savedLoan);
     }
 
-    // 6. Find Loan by ID
+    // 6. Retrieve Loan Details and Repayment Statistics
+    @Override
+    public AdminLoanDetailsResponse getLoanDetails(Long loanId) {
+
+        Loan loan = findLoanById(loanId);
+
+        List<Repayment> repayments =
+                (loan.getStatus() == LoanStatus.APPROVED ||
+                        loan.getStatus() == LoanStatus.CLOSED)
+                        ? repaymentRepository
+                        .findByLoanIdOrderByInstallmentNoAsc(loanId)
+                        : List.of();
+
+        LocalDate today = LocalDate.now();
+
+        long totalInstallments = repayments.size();
+
+        long paidInstallments = repayments.stream()
+                .filter(r -> r.getStatus() == RepaymentStatus.PAID)
+                .count();
+
+        long pendingInstallments = repayments.stream()
+                .filter(r -> r.getStatus() == RepaymentStatus.PENDING)
+                .count();
+
+        long overdueInstallments = repayments.stream()
+                .filter(r -> r.getStatus() == RepaymentStatus.PENDING)
+                .filter(r -> r.getDueDate().isBefore(today))
+                .count();
+
+        BigDecimal totalRepayableAmount = repayments.stream()
+                .map(Repayment::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalPaidAmount = repayments.stream()
+                .map(r -> r.getPaidAmount() == null
+                        ? BigDecimal.ZERO
+                        : r.getPaidAmount())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal outstandingAmount =
+                totalRepayableAmount.subtract(totalPaidAmount);
+
+        double repaymentProgress = totalInstallments == 0
+                ? 0.0
+                : (paidInstallments * 100.0) / totalInstallments;
+
+        List<AdminRepaymentResponse> repaymentDetails =
+                repayments.stream()
+                        .map(r -> new AdminRepaymentResponse(
+                                r.getId(),
+                                r.getInstallmentNo(),
+                                r.getDueDate(),
+                                r.getPrincipalAmount(),
+                                r.getInterestAmount(),
+                                r.getAmount(),
+                                r.getPaidAmount() == null
+                                        ? BigDecimal.ZERO
+                                        : r.getPaidAmount(),
+                                r.getStatus().name(),
+                                r.getPaidAt(),
+                                r.getStatus() == RepaymentStatus.PENDING
+                                        && r.getDueDate().isBefore(today)
+                        ))
+                        .toList();
+
+        return new AdminLoanDetailsResponse(
+                mapToResponse(loan),
+                totalInstallments,
+                paidInstallments,
+                pendingInstallments,
+                overdueInstallments,
+                totalRepayableAmount,
+                totalPaidAmount,
+                outstandingAmount,
+                repaymentProgress,
+                repaymentDetails
+        );
+    }
+
+    // 7. Find Loan by ID
     private Loan findLoanById(Long loanId) {
 
         return loanRepository.findById(loanId)
@@ -176,7 +268,7 @@ public class AdminServiceImpl implements AdminService {
                         ));
     }
 
-    // 7. Validate Current Loan Status
+    // 8. Validate Current Loan Status
     private void validateLoanStatus(Loan loan) {
 
         if (loan.getStatus() != LoanStatus.APPLIED) {
@@ -187,7 +279,7 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
-    // 8. Convert Entity to DTO
+    // 9. Convert Entity to DTO
     private AdminLoanResponse mapToResponse(Loan loan) {
 
         return new AdminLoanResponse(

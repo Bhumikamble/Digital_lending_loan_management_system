@@ -2,7 +2,7 @@ package com.miniSprint.Digital_lending_loan_management_system.service;
 import java.util.List;
 import com.miniSprint.Digital_lending_loan_management_system.dto.response.AdminDashboardResponse;
 import com.miniSprint.Digital_lending_loan_management_system.dto.response.AdminLoanResponse;
-
+import com.miniSprint.Digital_lending_loan_management_system.dto.response.AdminLoanDetailsResponse;
 public interface AdminService {
 
     AdminDashboardResponse getDashboardStats();
@@ -14,4 +14,6 @@ public interface AdminService {
     AdminLoanResponse approveLoan(Long loanId);
 
     AdminLoanResponse rejectLoan(Long loanId, String rejectionRemark);
+
+    AdminLoanDetailsResponse getLoanDetails(Long loanId);
 }
