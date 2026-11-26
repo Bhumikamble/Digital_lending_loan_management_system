@@ -22,33 +22,26 @@
                 <p>Manage your profile and loan applications.</p>
             </div>
 
+
             <div class="user-info">
 
-                <!-- Logged-in borrower's email -->
-                <span class="user-email"
-                      th:text="${userEmail}">
-        borrower@email.com
-    </span>
-
-                <!-- Circular profile avatar with edit option -->
+                <!-- Circular profile avatar only -->
                 <a th:href="@{/borrower/profile}"
                    class="profile-avatar"
-                   title="Edit Profile"
-                   aria-label="Edit Profile">
+                   aria-label="Profile">
 
-                    <!-- Show first letter of borrower's name -->
-                    <span th:text="${profile != null and profile.fullName != null and !#strings.isEmpty(profile.fullName)
+        <span th:text="${profile != null and profile.fullName != null and !#strings.isEmpty(profile.fullName)
             ? #strings.toUpperCase(#strings.substring(profile.fullName, 0, 1))
             : #strings.toUpperCase(#strings.substring(userEmail, 0, 1))}">
             M
         </span>
 
-                    <!-- Edit icon -->
-                    <span class="profile-edit-icon">✎</span>
-
                 </a>
 
             </div>
+
+
+
         </header>
 
         <section class="welcome-section">
