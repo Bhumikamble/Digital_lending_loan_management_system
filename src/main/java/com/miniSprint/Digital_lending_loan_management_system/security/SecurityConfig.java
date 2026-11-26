@@ -29,8 +29,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
 
-                        // Public pages and static resources
+                        // Public pages and
+                        // static resources
                         .requestMatchers(
+                                "/",
                                 "/register",
                                 "/login",
                                 "/css/**",
