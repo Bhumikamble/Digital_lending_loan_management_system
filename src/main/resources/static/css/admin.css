@@ -760,4 +760,28 @@ main {
 
 main.col-md-10 {
     min-height: 100vh;
+}/* JavaScript-free confirmation popups */
+
+.modal:target {
+    display: block !important;
+    opacity: 1 !important;
+    background: rgba(15, 23, 42, 0.55);
+    overflow-y: auto;
+}
+
+.modal:target .modal-dialog {
+    transform: none !important;
+    pointer-events: auto;
+}
+
+body:has(.modal:target) {
+    overflow: hidden;
+}
+
+.modal .btn-close {
+    cursor: pointer;
+}
+
+.modal-content {
+    border-radius: 16px;
 }
