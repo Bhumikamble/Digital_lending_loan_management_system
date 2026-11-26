@@ -21,21 +21,21 @@
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-dark bg-dark px-4">
-    <a class="navbar-brand" th:href="@{/admin/dashboard}">
-        <i class="bi bi-bank2"></i>
-        Digital Lending
-    </a>
 
-    <span class="text-white">Admin Portal</span>
-</nav>
 
 <div class="container-fluid">
     <div class="row">
 
         <!-- Sidebar -->
         <aside class="col-md-2 sidebar bg-dark text-white p-3">
+            <a class="admin-brand" th:href="@{/admin/dashboard}">
+                <div class="admin-brand-logo">D</div>
 
+                <div class="admin-brand-text">
+                    <div class="admin-brand-name">DigitalLend</div>
+                    <div class="admin-brand-subtitle">Admin Portal</div>
+                </div>
+            </a>
             <h6 class="text-secondary mb-4">MAIN MENU</h6>
 
             <a th:href="@{/admin/dashboard}"
@@ -57,7 +57,16 @@
                     Logout
                 </button>
             </form>
+            <div class="admin-sidebar-footer">
+                <div class="admin-footer-divider"></div>
 
+                <i class="bi bi-shield-lock"></i>
+                Secure Admin Portal
+
+                <div class="admin-copyright">
+                    &copy; 2026 DigitalLend
+                </div>
+            </div>
         </aside>
 
         <!-- Main Content -->

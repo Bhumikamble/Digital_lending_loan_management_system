@@ -156,4 +156,30 @@ public class AdminWebController {
 
         return "redirect:/admin/loans";
     }
+    // 5. Display Loan Details and Repayment Status
+    @GetMapping("/loans/{loanId}")
+    public String showLoanDetails(
+            @PathVariable("loanId") Long loanId,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+
+            model.addAttribute(
+                    "details",
+                    adminService.getLoanDetails(loanId)
+            );
+
+            return "admin/loan-details";
+
+        } catch (LoanNotFoundException e) {
+
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    e.getMessage()
+            );
+
+            return "redirect:/admin/loans";
+        }
+    }
 }

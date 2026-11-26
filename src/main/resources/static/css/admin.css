@@ -556,4 +556,208 @@ main {
 
 .table .btn i {
     margin-right: 4px;
+}.admin-brand {
+     display: flex;
+     align-items: center;
+     gap: 12px;
+     text-decoration: none;
+     margin-bottom: 40px;
+ }
+
+.admin-brand-logo {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: #3055c5;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.admin-brand-name {
+    color: #ffffff;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.admin-brand-subtitle {
+    color: #a7bce0;
+    font-size: 13px;
+}
+
+.sidebar.bg-dark {
+    background-color: #142038 !important;
+}/* ADMIN PROFILE AND HEADER */
+
+.admin-header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.admin-header-title i {
+    color: #93c5fd;
+    font-size: 23px;
+}
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #3158c9;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.admin-profile-name {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.admin-profile-role {
+    color: #a7bce0;
+    font-size: 11px;
+}
+
+/* SIDEBAR FOOTER */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-sidebar-footer {
+    margin-top: auto;
+    padding-top: 35px;
+    text-align: center;
+    font-size: 12px;
+    color: #a7bce0;
+}
+
+.admin-footer-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    margin-bottom: 20px;
+}
+
+.admin-copyright {
+    margin-top: 8px;
+    font-size: 11px;
+    color: #8294b2;
+}
+
+@media (max-width: 1100px) {
+    .admin-brand {
+        gap: 8px;
+    }
+
+    .admin-brand-logo {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+
+    .admin-brand-name {
+        font-size: 14px;
+    }
+
+    .admin-brand-subtitle {
+        font-size: 11px;
+    }
+}/* ==============================
+   ADMIN LOAN DETAILS
+================================ */
+
+.detail-field {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 0;
+    border-bottom: 1px solid #edf1f6;
+}
+
+.detail-field:last-child {
+    border-bottom: none;
+}
+
+.detail-field span {
+    color: #8492a6;
+    font-size: 13px;
+}
+
+.detail-field strong {
+    color: #17243d;
+    font-size: 14px;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+.repayment-stat {
+    border: 1px solid #e5eaf2;
+    border-radius: 18px;
+    box-shadow: 0 4px 20px rgba(23, 36, 61, 0.045);
+    transition: all 0.25s ease;
+}
+
+.repayment-stat:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(23, 36, 61, 0.09);
+}
+
+.repayment-stat .card-body {
+    padding: 24px;
+}
+
+.repayment-stat p {
+    font-size: 13px;
+    font-weight: 600;
+    color: #74839a;
+    margin-top: 15px;
+    margin-bottom: 8px;
+}
+
+.repayment-stat h2 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 0;
+}
+
+.repayment-progress {
+    height: 14px;
+    border-radius: 20px;
+    background: #eaf0f6;
+}
+
+.repayment-progress .progress-bar {
+    border-radius: 20px;
+    background: linear-gradient(
+            90deg, #059669, #34d399
+    ) !important;
+}/* Full-height admin layout without navbar */
+
+.sidebar {
+    min-height: 100vh;
+}
+
+main.col-md-10 {
+    min-height: 100vh;
 }
