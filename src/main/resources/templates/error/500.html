@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Internal Server Error</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="error-container">
+
+    <div class="error-card">
+
+        <div class="error-icon">&#9888;</div>
+
+        <h1 class="error-code">500</h1>
+
+        <h2>Something Went Wrong</h2>
+
+        <p>
+            We encountered an unexpected error while
+            processing your request. Please try again later.
+            If the problem continues, contact the administrator.
+        </p>
+
+        <div class="error-actions">
+            <a th:href="@{/}" class="error-btn">
+                Back to Home
+            </a>
+        </div>
+
+    </div>
+
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>
