@@ -1,4 +1,3 @@
-
 package com.miniSprint.Digital_lending_loan_management_system.dto;
 
 import java.math.BigDecimal;

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(pageTitle, content)">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${pageTitle} + ' | Digital Lending'">
+        Digital Lending
+    </title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main>
+    <div th:replace="~{fragments/messages :: messages}"></div>
+    <div th:replace="${content}"></div>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="layout(pageTitle, content)">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${pageTitle} + ' | Digital Lending'">
+        Digital Lending
+    </title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main>
+    <div th:replace="~{fragments/messages :: messages}"></div>
+    <div th:replace="${content}"></div>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>
