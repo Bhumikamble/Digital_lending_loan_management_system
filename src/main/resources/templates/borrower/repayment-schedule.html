@@ -1,95 +1,269 @@
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Repayment Schedule</title>
 
+    <title>Repayment Schedule | DigitalLend</title>
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
 
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <!-- Shared Borrower CSS -->
     <link rel="stylesheet" th:href="@{/css/borrower.css}">
 
     <style>
-        .main-content {
-            padding: 30px;
-            min-height: 100vh;
-            background: #f8f9fc;
+        * {
+            box-sizing: border-box;
         }
 
-        .page-header {
+        body {
+            background: #f4f7fc;
+            font-family: 'Segoe UI', sans-serif;
+            color: #17243b;
+            margin: 0;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 30px 35px;
+            min-width: 0;
+        }
+
+        /* Top Header */
+        .top-header {
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            margin-bottom: 30px;
+            width: 100%;
+            margin-bottom: 35px;
         }
 
-        .user-info {
+        .header-right {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 20px;
         }
 
-        .user-email {
-            color: #343a40;
+        .borrower-email {
+            color: #71809a;
+            font-size: 16px;
             font-weight: 500;
         }
 
+        /* Profile Avatar */
         .profile-avatar {
-            width: 42px;
-            height: 42px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
-            background: #2563eb;
+            background: #3159c9;
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-decoration: none;
+            font-size: 25px;
             font-weight: 600;
+            text-decoration: none;
+            flex-shrink: 0;
+            transition: 0.2s;
         }
 
-        .content-card {
+        .profile-avatar:hover {
+            background: #2349ad;
+            color: white;
+        }
+
+        /* Page Heading */
+        .page-title {
+            font-weight: 750;
+            color: #17243b;
+        }
+
+        .subtitle {
+            color: #71809a;
+            font-size: 17px;
+        }
+
+        /* Main Cards */
+        .schedule-card {
             background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
+            border: 1px solid #e2e9f4;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 8px 25px rgba(25, 48, 82, 0.06);
+            height: 100%;
         }
 
-        .table th {
-            background: #f1f4f9;
+        .section-title {
+            font-weight: 700;
+            color: #1c3153;
+        }
+
+        /* Generate Schedule Card */
+        .generate-card {
+            background: white;
+            border: 1px solid #e2e9f4;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 8px 25px rgba(25, 48, 82, 0.06);
+        }
+
+        .generate-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            background: #edf4ff;
+            color: #1264d9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+            flex-shrink: 0;
+        }
+
+        .generate-description {
+            color: #71809a;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* Buttons */
+        .btn-generate {
+            background: linear-gradient(90deg, #0866e9, #287df5);
+            border: none;
+            color: white;
+            padding: 13px 22px;
+            border-radius: 9px;
+            font-weight: 600;
+            transition: 0.2s;
             white-space: nowrap;
         }
 
-        .table td {
-            vertical-align: middle;
+        .btn-generate:hover {
+            background: #0755c4;
+            color: white;
         }
 
-        .status {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+        .btn-pay {
+            background: linear-gradient(90deg, #0866e9, #287df5);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
             font-weight: 600;
+            font-size: 13px;
         }
 
-        .status-paid {
-            background: #d1fae5;
-            color: #065f46;
+        .btn-pay:hover {
+            background: #0755c4;
+            color: white;
         }
 
-        .status-pending {
-            background: #fef3c7;
-            color: #92400e;
+        /* Status Badges */
+        .status-badge {
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
         }
 
-        @media (max-width: 768px) {
+        /* Table */
+        .table-responsive {
+            border-radius: 12px;
+        }
+
+        .repayment-table {
+            margin-bottom: 0;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .repayment-table thead th {
+            background: #edf4ff;
+            color: #354762;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 16px 13px;
+            border-bottom: 1px solid #d8e1ee;
+        }
+
+        .repayment-table tbody td {
+            color: #526681;
+            font-size: 14px;
+            padding: 16px 13px;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .repayment-table tbody tr:hover {
+            background: #f8faff;
+        }
+
+        .repayment-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Information Box */
+        .info-box {
+            background: #eef4ff;
+            border-left: 4px solid #1769e8;
+            border-radius: 8px;
+            padding: 17px;
+            color: #526681;
+        }
+
+        /* Empty State */
+        .empty-result-icon {
+            font-size: 65px;
+            color: #b8c9e2;
+        }
+
+        .empty-state {
+            padding: 45px 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 767px) {
             .main-content {
-                padding: 15px;
+                padding: 20px;
             }
 
-            .content-card {
-                padding: 15px;
+            .top-header {
+                margin-bottom: 25px;
+            }
+
+            .header-right {
+                gap: 12px;
+            }
+
+            .borrower-email {
+                font-size: 12px;
+            }
+
+            .profile-avatar {
+                width: 42px;
+                height: 42px;
+                font-size: 19px;
+            }
+
+            .schedule-card,
+            .generate-card {
+                padding: 20px;
+            }
+
+            .generate-layout {
+                align-items: flex-start !important;
+            }
+
+            .btn-generate {
+                width: 100%;
             }
         }
     </style>
@@ -97,135 +271,314 @@
 
 <body>
 
-<div class="d-flex">
+<div class="container-fluid">
+    <div class="row">
 
-    <!-- Shared Sidebar -->
-    <div th:replace="~{borrower/fragments/sidebar :: sidebar('schedule')}"></div>
+        <!-- Shared Borrower Sidebar -->
+        <div th:replace="~{borrower/fragments/sidebar :: sidebar('schedule')}"></div>
 
-    <!-- Main Content -->
-    <main class="main-content flex-grow-1">
+        <!-- Main Repayment Schedule Content -->
+        <main class="col-md-9 col-lg-10 main-content">
 
-        <!-- Top Header -->
-        <div class="page-header">
-            <div class="user-info">
-                <span class="user-email" th:text="${userEmail}">borrower@email.com</span>
+            <!-- Top Right Borrower Profile Header -->
+            <div class="top-header">
+                <div class="header-right">
 
-                <a th:href="@{/borrower/profile}" class="profile-avatar">
-                    <span th:text="${#strings.substring(userEmail,0,1).toUpperCase()}">B</span>
-                </a>
+                    <span class="borrower-email"
+                          th:text="${userEmail}">
+                        borrower@example.com
+                    </span>
+
+                    <a th:href="@{/borrower/profile}"
+                       class="profile-avatar"
+                       th:text="${userEmail != null and !userEmail.isEmpty()
+                           ? #strings.substring(userEmail, 0, 1).toUpperCase()
+                           : 'B'}"
+                       title="View Borrower Profile">
+                        B
+                    </a>
+
+                </div>
             </div>
-        </div>
 
-        <div class="mb-4">
-            <h2 class="fw-bold">Repayment Schedule</h2>
-            <p class="text-muted">
-                View your loan EMI installments and payment status.
+            <!-- Page Heading -->
+            <h2 class="page-title">
+                <i class="bi bi-calendar-check text-primary"></i>
+                Repayment Schedule
+            </h2>
+
+            <p class="subtitle">
+                View your monthly EMI installments and manage your repayments.
             </p>
-        </div>
 
-        <!-- Generate Schedule -->
-        <div class="content-card">
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                <div>
-                    <h5 class="fw-bold mb-1">Your EMI Schedule</h5>
-                    <p class="text-muted mb-0">
-                        Generate your repayment schedule for the selected loan.
-                    </p>
+            <!-- Generate Schedule Card -->
+            <div class="generate-card mt-4 mb-4">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-4 generate-layout">
+
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="generate-icon">
+                            <i class="bi bi-calendar2-week"></i>
+                        </div>
+
+                        <div>
+                            <h5 class="section-title mb-2">
+                                Your EMI Schedule
+                            </h5>
+
+                            <p class="generate-description mb-0"
+                               th:if="${loan.status.name() != 'APPROVED'}">
+                                Your loan is awaiting admin approval.
+                                The repayment schedule will be available after approval.
+                            </p>
+
+                            <p class="generate-description mb-0"
+                               th:if="${loan.status.name() == 'APPROVED' and scheduleExists}">
+                                Your repayment schedule has been generated.
+                                You can view your installment details below.
+                            </p>
+
+                            <p class="generate-description mb-0"
+                               th:if="${loan.status.name() == 'APPROVED' and !scheduleExists}">
+                                Your loan is approved. You can now generate your repayment schedule.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- Generate Button -->
+                    <form th:if="${loan.status.name() == 'APPROVED' and !scheduleExists}"
+                          th:action="@{/repayments/generate}"
+                          method="post">
+
+                        <button type="submit" class="btn btn-generate">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            Generate Schedule
+                        </button>
+
+                    </form>
+
+                    <!-- Awaiting Approval -->
+                    <span th:if="${loan.status.name() != 'APPROVED'}"
+                          class="badge bg-warning text-dark status-badge">
+                        <i class="bi bi-clock-history me-1"></i>
+                        Awaiting Approval
+                    </span>
+
+                    <!-- Schedule Generated -->
+                    <span th:if="${loan.status.name() == 'APPROVED' and scheduleExists}"
+                          class="badge bg-success status-badge">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Schedule Generated
+                    </span>
+
+                </div>
+            </div>
+
+            <!-- Repayment Schedule Table -->
+            <div class="schedule-card">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+
+                    <div>
+                        <h4 class="section-title mb-1">
+                            <i class="bi bi-list-check text-primary"></i>
+                            Installment Details
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            Your complete monthly repayment breakdown.
+                        </p>
+                    </div>
+
+                    <span class="badge bg-primary status-badge"
+                          th:if="${scheduleExists}"
+                          th:text="${repayments.size() + ' Installments'}">
+                        Installments
+                    </span>
+
                 </div>
 
-                <form th:action="@{/repayments/generate}" method="post">
-                    <button type="submit" class="btn btn-primary">
-                        Generate Schedule
-                    </button>
-                </form>
+                <!-- Show Table When Schedule Exists -->
+                <div class="table-responsive"
+                     th:if="${scheduleExists}">
+
+                    <table class="table repayment-table">
+
+                        <thead>
+                        <tr>
+                            <th>Installment</th>
+                            <th>Due Date</th>
+                            <th>Principal</th>
+                            <th>Interest</th>
+                            <th>EMI Amount</th>
+                            <th>Paid Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        <tr th:each="repayment : ${repayments}">
+
+                            <td class="fw-semibold"
+                                th:text="${repayment.installmentNo}">
+                                1
+                            </td>
+
+                            <td th:text="${repayment.dueDate != null
+                                ? #temporals.format(repayment.dueDate, 'dd MMM yyyy')
+                                : 'N/A'}">
+                                01 Jan 2026
+                            </td>
+
+                            <td>
+                                ₹<span th:text="${repayment.principalAmount}">0.00</span>
+                            </td>
+
+                            <td>
+                                ₹<span th:text="${repayment.interestAmount}">0.00</span>
+                            </td>
+
+                            <td class="fw-semibold text-dark">
+                                ₹<span th:text="${repayment.amount}">0.00</span>
+                            </td>
+
+                            <td>
+                                ₹<span th:text="${repayment.paidAmount}">0.00</span>
+                            </td>
+
+                            <!-- Repayment Status -->
+                            <td>
+
+                                <span th:if="${repayment.status.name() == 'PAID'}"
+                                      class="badge bg-success status-badge">
+                                    Paid
+                                </span>
+
+                                <span th:if="${repayment.status.name() == 'PENDING'
+                                    and repayment.dueDate != null
+                                    and repayment.dueDate.isBefore(T(java.time.LocalDate).now())}"
+                                      class="badge bg-danger status-badge">
+                                    Overdue
+                                </span>
+
+                                <span th:if="${repayment.status.name() == 'PENDING'
+                                    and repayment.dueDate != null
+                                    and !repayment.dueDate.isBefore(T(java.time.LocalDate).now())}"
+                                      class="badge bg-warning text-dark status-badge">
+                                    Pending
+                                </span>
+
+                            </td>
+
+                            <!-- Payment Action -->
+                            <td>
+
+                                <form th:if="${loan.status.name() == 'APPROVED'
+                                    and repayment.status.name() == 'PENDING'
+                                    and repayment.dueDate != null
+                                    and !repayment.dueDate.isAfter(T(java.time.LocalDate).now())}"
+                                      th:action="@{/repayments/{id}/pay(id=${repayment.id})}"
+                                      method="post">
+
+                                    <button type="submit" class="btn btn-pay">
+                                        <i class="bi bi-credit-card me-1"></i>
+                                        Pay Now
+                                    </button>
+
+                                </form>
+
+                                <span th:if="${repayment.status.name() == 'PAID'}"
+                                      class="text-success fw-semibold">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    Completed
+                                </span>
+
+                                <span th:if="${repayment.status.name() == 'PENDING'
+                                    and repayment.dueDate != null
+                                    and repayment.dueDate.isAfter(T(java.time.LocalDate).now())}"
+                                      class="text-muted">
+                                    Not Due
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <!-- Empty State -->
+                <div th:if="${!scheduleExists}"
+                     class="text-center empty-state">
+
+                    <i class="bi bi-calendar-x empty-result-icon"></i>
+
+                    <h5 class="mt-3 text-secondary">
+                        No Repayment Schedule Available
+                    </h5>
+
+                    <p class="text-muted mb-0"
+                       th:if="${loan.status.name() != 'APPROVED'}">
+                        Your repayment schedule will appear here once your loan is approved by the admin.
+                    </p>
+
+                    <p class="text-muted mb-0"
+                       th:if="${loan.status.name() == 'APPROVED'}">
+                        Click the Generate Schedule button above to create your repayment schedule.
+                    </p>
+
+                </div>
+
             </div>
-        </div>
 
-        <!-- Repayment Table -->
-        <div class="content-card">
-            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                <h5 class="fw-bold mb-0">Installment Details</h5>
+            <!-- Important Information -->
+            <div class="info-box mt-4">
 
-                <a th:href="@{/repayments/history}" class="btn btn-outline-primary btn-sm">
-                    View Repayment History
-                </a>
+                <h6 class="fw-bold">
+                    <i class="bi bi-info-circle text-primary"></i>
+                    Important Information
+                </h6>
+
+                <p class="mb-0">
+                    Please make your EMI payments on or before the due date.
+                    Only installments that are due can be marked as paid.
+                    Contact the administrator if you have any questions
+                    regarding your repayment schedule.
+                </p>
+
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead>
-                    <tr>
-                        <th>Installment</th>
-                        <th>Due Date</th>
-                        <th>Principal</th>
-                        <th>Interest</th>
-                        <th>EMI Amount</th>
-                        <th>Paid Amount</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
+        </main>
 
-                    <tbody>
-                    <tr th:each="repayment : ${repayments}">
-                        <td th:text="${repayment.installmentNo}"></td>
-
-                        <td th:text="${repayment.dueDate}"></td>
-
-                        <td th:text="${repayment.principalAmount}"></td>
-
-                        <td th:text="${repayment.interestAmount}"></td>
-
-                        <td th:text="${repayment.amount}"></td>
-
-                        <td th:text="${repayment.paidAmount}"></td>
-
-                        <td>
-                            <span class="status"
-                                  th:classappend="${repayment.status.name() == 'PAID'} ? ' status-paid' : ' status-pending'"
-                                  th:text="${repayment.status}">
-                            </span>
-                        </td>
-
-                        <td>
-                            <form th:if="${repayment.status.name() == 'PENDING'
-                                      and repayment.dueDate != null
-                                      and !repayment.dueDate.isAfter(T(java.time.LocalDate).now())}"
-                                  th:action="@{/repayments/{id}/pay(id=${repayment.id})}"
-                                  method="post">
-
-                                <button type="submit" class="btn btn-success btn-sm">
-                                    Pay Now
-                                </button>
-                            </form>
-
-                            <span th:if="${repayment.status.name() == 'PAID'}"
-                                  class="text-success fw-semibold">
-                                Paid
-                            </span>
-
-                            <span th:if="${repayment.status.name() == 'PENDING'
-                                         and repayment.dueDate != null
-                                         and repayment.dueDate.isAfter(T(java.time.LocalDate).now())}"
-                                  class="text-muted">
-                                Not Due
-                            </span>
-                        </td>
-                    </tr>
-
-                    <tr th:if="${#lists.isEmpty(repayments)}">
-                        <td colspan="8" class="text-center text-muted py-4">
-                            No repayment schedule found. Generate your schedule first.
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </main>
+    </div>
 </div>
 
+<!-- Success Message -->
+<div th:if="${successMessage}"
+     class="alert alert-success alert-dismissible fade show mt-3"
+     role="alert">
+    <i class="bi bi-check-circle-fill me-2"></i>
+    <span th:text="${successMessage}"></span>
+    <button type="button" class="btn-close"
+            data-bs-dismiss="alert"></button>
+</div>
+
+<!-- Error Message -->
+<div th:if="${errorMessage}"
+     class="alert alert-danger alert-dismissible fade show mt-3"
+     role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <span th:text="${errorMessage}"></span>
+    <button type="button" class="btn-close"
+            data-bs-dismiss="alert"></button>
+</div>
+<!-- Bootstrap JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

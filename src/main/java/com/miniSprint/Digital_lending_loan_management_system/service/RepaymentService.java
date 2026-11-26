@@ -83,18 +83,23 @@ public class RepaymentService {
         return createSchedule(loan);
     }
 
-    // Common schedule-generation logic
-    private List<Repayment> createSchedule(Loan loan) {if (loan.getStatus() != LoanStatus.APPROVED) {
-        throw new IllegalStateException(
-                "Repayment schedule can only be generated for approved loans");
-    }
+    // 3. Common schedule-generation logic
+    private List<Repayment> createSchedule(Loan loan) {
 
         Long loanId = loan.getId();
+
+        // Only approved loans can have a repayment schedule
+        if (loan.getStatus() != LoanStatus.APPROVED) {
+            throw new IllegalStateException(
+                    "Repayment schedule can only be generated for approved loans."
+            );
+        }
 
         // Check whether schedule already exists
         if (repaymentRepository.existsByLoanId(loanId)) {
             throw new IllegalStateException(
-                    "Repayment schedule already exists");
+                    "Repayment schedule already exists."
+            );
         }
 
         // Get loan details
@@ -177,7 +182,7 @@ public class RepaymentService {
                 .findByLoanIdOrderByInstallmentNoAsc(loanId);
     }
 
-    // 3. Retrieve repayment history
+    // 4. Retrieve repayment history
     // Verifies that the loan belongs to the logged-in borrower.
     public List<Repayment> getRepaymentHistory(
             Long loanId, Long userId) {
@@ -190,8 +195,8 @@ public class RepaymentService {
                 .findByLoanIdOrderByInstallmentNoAsc(loanId);
     }
 
-    // 4. Mark installment as paid
-    // Verifies that the repayment belongs to the logged-in borrower.
+    // 5. Mark installment as paid
+    // Verifies ownership, approval status and due date.
     @Transactional
     public void markAsPaid(Long repaymentId, Long userId) {
 
@@ -201,16 +206,25 @@ public class RepaymentService {
                 .orElseThrow(() ->
                         new RuntimeException("Repayment not found"));
 
+        // Only approved loans can receive EMI payments
+        if (repayment.getLoan().getStatus() != LoanStatus.APPROVED) {
+            throw new IllegalStateException(
+                    "EMI payments are allowed only for approved loans."
+            );
+        }
+
         // Check repayment status
         if (repayment.getStatus() != RepaymentStatus.PENDING) {
             throw new IllegalStateException(
-                    "This installment cannot be marked as paid");
+                    "This installment cannot be marked as paid"
+            );
         }
 
         // Check due date
         if (repayment.getDueDate().isAfter(LocalDate.now())) {
             throw new IllegalStateException(
-                    "This installment is not due yet");
+                    "This installment is not due yet"
+            );
         }
 
         // Update repayment details
