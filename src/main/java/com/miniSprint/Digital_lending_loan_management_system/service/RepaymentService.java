@@ -196,7 +196,7 @@ public class RepaymentService {
     }
 
     // 5. Mark installment as paid
-    // Verifies ownership, approval status and due date.
+    // Verifies ownership, approval status and installment order.
     @Transactional
     public void markAsPaid(Long repaymentId, Long userId) {
 
@@ -220,10 +220,21 @@ public class RepaymentService {
             );
         }
 
-        // Check due date
-        if (repayment.getDueDate().isAfter(LocalDate.now())) {
+
+        // Allow early EMI payments in installment order
+        Repayment nextPayable = repaymentRepository
+                .findByLoanIdOrderByInstallmentNoAsc(
+                        repayment.getLoan().getId())
+                .stream()
+                .filter(r -> r.getStatus() == RepaymentStatus.PENDING)
+                .findFirst()
+                .orElseThrow(() ->
+                        new IllegalStateException(
+                                "No pending installments found"));
+
+        if (!nextPayable.getId().equals(repayment.getId())) {
             throw new IllegalStateException(
-                    "This installment is not due yet"
+                    "Please pay the previous installment first"
             );
         }
 

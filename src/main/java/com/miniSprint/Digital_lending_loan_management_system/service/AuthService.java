@@ -1,10 +1,9 @@
-
 package com.miniSprint.Digital_lending_loan_management_system.service;
 
 import com.miniSprint.Digital_lending_loan_management_system.entity.Role;
 import com.miniSprint.Digital_lending_loan_management_system.entity.User;
 import com.miniSprint.Digital_lending_loan_management_system.repository.UserRepository;
-
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
