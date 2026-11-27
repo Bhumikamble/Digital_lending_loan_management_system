@@ -1,16 +1,14 @@
+
 package com.miniSprint.Digital_lending_loan_management_system.security;
 
-import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     private final RoleBasedLoginSuccessHandler successHandler;
@@ -25,17 +23,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http)
+            throws Exception {
+
         http
                 .authorizeHttpRequests(auth -> auth
 
-                        // Allow error and forward dispatches
-                        .dispatcherTypeMatchers(
-                                DispatcherType.ERROR,
-                                DispatcherType.FORWARD
-                        ).permitAll()
-
-                        // Public pages and static resources
+                        // Public pages and
+                        // static resources
                         .requestMatchers(
                                 "/",
                                 "/register",

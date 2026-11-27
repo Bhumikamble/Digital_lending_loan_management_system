@@ -22,7 +22,22 @@
                 <h2>My Loans</h2>
                 <p>View and track all your loan applications.</p>
             </div>
-            <span class="user-info" th:text="${userEmail}">Email</span>
+            <div class="user-info">
+
+                <!-- Circular profile avatar only -->
+                <a th:href="@{/borrower/profile}"
+                   class="profile-avatar"
+                   aria-label="Profile">
+
+        <span th:text="${profile != null and profile.fullName != null and !#strings.isEmpty(profile.fullName)
+            ? #strings.toUpperCase(#strings.substring(profile.fullName, 0, 1))
+            : #strings.toUpperCase(#strings.substring(userEmail, 0, 1))}">
+            M
+        </span>
+
+                </a>
+
+            </div>
         </header>
 
         <div class="alert alert-success"
