@@ -778,14 +778,21 @@ td {
 }
 
 /* Dropdown arrow */
+
 .dropdown-arrow {
     margin-left: auto;
-    font-size: 17px;
-    transition: transform 0.2s ease;
+    width: 9px;
+    height: 9px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+    font-size: 0;
 }
 
 .sidebar-dropdown[open] .dropdown-arrow {
-    transform: rotate(180deg);
+    transform: rotate(225deg);
 }
 
 /* Submenu alignment */
